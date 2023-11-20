@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Android Школа</string>
+    <string name="hello_eltex">Привет Елтекс!</string>
+    <string name="avatar">аватарка</string>
+    <string name="menu">меню</string>
+    <string name="likes">лайки</string>
+    <string name="share">переслать</string>
+    <string name="event">событие</string>
+</resources>
