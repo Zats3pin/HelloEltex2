@@ -7,4 +7,5 @@
     <string name="likes">лайки</string>
     <string name="share">переслать</string>
     <string name="event">событие</string>
+    <string name="not_implemented">Не реализовано</string>
 </resources>
