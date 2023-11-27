@@ -1,6 +1,6 @@
 package com.eltex.androidschool.model
 
-data class Post (
+data class Event(
     val id: Long = 0L,
     val content: String = "",
     val author: String = "",
@@ -9,9 +9,7 @@ data class Post (
     val link: String = "",
     val status: Boolean = false,
     val timeStatus: String = "",
-    val eventMe: Boolean = false,
+    val participatedByMe: Boolean = false,
 
 
-
-
-)
+    )
