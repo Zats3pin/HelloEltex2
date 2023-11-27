@@ -5,7 +5,7 @@ import android.os.Bundle
 
 import com.eltex.androidschool.databinding.ActivityMainBinding
 import com.eltex.androidschool.model.Post
-import com.eltex.androidschool.model.utils.toast
+import com.eltex.androidschool.utils.toast
 
 
 class MainActivity : AppCompatActivity() {
@@ -22,68 +22,71 @@ class MainActivity : AppCompatActivity() {
             author = "Lydia Westervelt",
             published = "11.05.22 11:21",
             likedByMe = false,
-            link= "https://m2.material.io/components/cards",
+            link = "https://m2.material.io/components/cards",
             status = false,
             timeStatus = "16.05.22 12:00",
             eventMe = false,
         )
         bindPost(binding, post)
 
-        binding.like.setOnClickListener{
+        binding.like.setOnClickListener {
             post = post.copy(likedByMe = !post.likedByMe)
 
-            bindPost(binding,post)
+            bindPost(binding, post)
 
         }
 
-        binding.event.setOnClickListener{
+        binding.event.setOnClickListener {
             post = post.copy(eventMe = !post.eventMe)
-            bindPost(binding,post)
+            bindPost(binding, post)
         }
 
-        binding.menu.setOnClickListener{
-            toast(R.string.not_implemented,false)
+        binding.menu.setOnClickListener {
+            toast(R.string.not_implemented, false)
         }
 
-        binding.share.setOnClickListener{
-            toast(R.string.not_implemented,false)
+        binding.share.setOnClickListener {
+            toast(R.string.not_implemented, false)
         }
     }
 
-    private fun bindPost(binding: ActivityMainBinding,post: Post)
-    {
+    private fun bindPost(binding: ActivityMainBinding, post: Post) {
         binding.author.text = post.author
         binding.content.text = post.content
         binding.published.text = post.published
         binding.initial.text = post.author.take(1)
         binding.link.text = post.link
-        binding.status.text = if (post.status) { "Online"}else{"Offline"}
+        binding.status.text = if (post.status) {
+            "Online"
+        } else {
+            "Offline"
+        }
         binding.timeStatus.text = post.timeStatus
         binding.like.setIconResource(
-            if(post.likedByMe) {
+            if (post.likedByMe) {
                 R.drawable.favorit_like
-            } else{
+            } else {
                 R.drawable.baseline_favorite_border_24
             }
         )
-        binding.like.text = if(post.likedByMe) {
+        binding.like.text = if (post.likedByMe) {
             1
-        } else{
+        } else {
             0
         }.toString()
 
         binding.event.setIconResource(
-            if(post.eventMe) {
+            if (post.eventMe) {
                 R.drawable.event_true
-            } else{
+            } else {
                 R.drawable.event
             }
         )
-        binding.event.text = if(post.eventMe) {
+        binding.event.text = if (post.eventMe) {
             1
-        } else{
+        } else {
             0
         }.toString()
     }
-    }
+}
 
