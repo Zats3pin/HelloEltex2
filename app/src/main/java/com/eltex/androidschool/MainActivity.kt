@@ -2,43 +2,53 @@ package com.eltex.androidschool
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 
 import com.eltex.androidschool.databinding.ActivityMainBinding
 import com.eltex.androidschool.model.Post
+import com.eltex.androidschool.repository.InMemoryPostRepository
 import com.eltex.androidschool.utils.toast
+import com.eltex.androidschool.viewmodel.PostViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val viewModel by viewModels<PostViewModel> {
+            viewModelFactory {
+                initializer {
+                    PostViewModel(InMemoryPostRepository())
+                }
+            }
+        }
+
         val binding = ActivityMainBinding.inflate(layoutInflater)
 
 
         setContentView(binding.root)
-        var post = Post(
-            id = 1L,
-            content = "Приглашаю провести уютный вечер за увлекательными играми! У нас есть несколько вариантов настолок, подходящих для любой компании.",
-            author = "Lydia Westervelt",
-            published = "11.05.22 11:21",
-            likedByMe = false,
-            link = "https://m2.material.io/components/cards",
-            status = false,
-            timeStatus = "16.05.22 12:00",
-            eventMe = false,
-        )
-        bindPost(binding, post)
+
+        viewModel.state
+            .flowWithLifecycle(lifecycle)
+            .onEach {
+                bindPost(binding,it.post)
+            }.launchIn(lifecycleScope)
+
+
 
         binding.like.setOnClickListener {
-            post = post.copy(likedByMe = !post.likedByMe)
-
-            bindPost(binding, post)
+            viewModel.like()
 
         }
 
         binding.event.setOnClickListener {
-            post = post.copy(eventMe = !post.eventMe)
-            bindPost(binding, post)
+            viewModel.event()
         }
 
         binding.menu.setOnClickListener {
