@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
                 val events = it.events
 
                 events.forEach {event ->
-                  val eventBinding =  CardEventBinding.inflate(layoutInflater, binding.root, true)
+                  val eventBinding =  CardEventBinding.inflate(layoutInflater, binding.container, true)
                     bindEvent(eventBinding,event)
 
                     eventBinding.like.setOnClickListener {
