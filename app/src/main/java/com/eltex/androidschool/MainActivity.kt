@@ -7,6 +7,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.eltex.androidschool.adapter.EventsAdapter
 
 import com.eltex.androidschool.databinding.ActivityMainBinding
 import com.eltex.androidschool.databinding.CardEventBinding
@@ -35,35 +36,43 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
+       val adapter = EventsAdapter{
+           viewModel.likeById(it.id)
+        }
+
+        binding.root.adapter = adapter
+
         viewModel.state
             .flowWithLifecycle(lifecycle)
             .onEach {
-                binding.container.removeAllViews()
-                val events = it.events
+                adapter.events = it.events
 
-                events.forEach {event ->
-                  val eventBinding =  CardEventBinding.inflate(layoutInflater, binding.container, true)
-                    bindEvent(eventBinding,event)
+               // binding.container.removeAllViews()
+               // val events = it.events
 
-                    eventBinding.like.setOnClickListener {
-                        viewModel.likeById(event.id)
+               // events.forEach {event ->
 
-                    }
+               //     bindEvent(eventBinding,event)
 
-                    eventBinding.event.setOnClickListener {
-                        viewModel.participateById(event.id)
-                    }
+                //    eventBinding.like.setOnClickListener {
+               //         viewModel.likeById(event.id)
 
-                    eventBinding.menu.setOnClickListener {
-                        toast(R.string.not_implemented, false)
-                    }
+               //     }
 
-                    eventBinding.share.setOnClickListener {
-                        toast(R.string.not_implemented, false)
-                    }
+               //     eventBinding.event.setOnClickListener {
+               //         viewModel.participateById(event.id)
+               //     }
+
+               //     eventBinding.menu.setOnClickListener {
+               //         toast(R.string.not_implemented, false)
+               //     }
+
+               //     eventBinding.share.setOnClickListener {
+               //         toast(R.string.not_implemented, false)
+               //     }
 
 
-                }
+              //  }
             }.launchIn(lifecycleScope)
 
 
@@ -71,45 +80,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun bindEvent(
-        binding:CardEventBinding,
-        event: Event) {
-        binding.author.text = event.author
-        binding.content.text = event.content
-        binding.published.text = event.published
-        binding.initial.text = event.author.take(1)
-        binding.link.text = event.link
-        binding.status.text = if (event.status) {
-            getString(R.string.event_online)
-        } else {
-            getString(R.string.event_offline)
-        }
-        binding.timeStatus.text = event.timeStatus
-        binding.like.setIconResource(
-            if (event.likedByMe) {
-                R.drawable.favorit_like
-            } else {
-                R.drawable.baseline_favorite_border_24
-            }
-        )
-        binding.like.text = if (event.likedByMe) {
-            1
-        } else {
-            0
-        }.toString()
 
-        binding.event.setIconResource(
-            if (event.participatedByMe) {
-                R.drawable.event_true
-            } else {
-                R.drawable.event
-            }
-        )
-        binding.event.text = if (event.participatedByMe) {
-            1
-        } else {
-            0
-        }.toString()
-    }
 }
 
