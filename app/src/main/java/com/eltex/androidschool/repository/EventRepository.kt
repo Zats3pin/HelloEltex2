@@ -4,8 +4,8 @@ import com.eltex.androidschool.model.Event
 import kotlinx.coroutines.flow.Flow
 
 interface EventRepository {
-    fun getPost(): Flow<Event>
-    fun like()
+    fun getPost(): Flow<List<Event>>
+    fun likeById(id: Long)
 
-    fun participate()
+    fun participateById(id: Long)
 }

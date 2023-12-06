@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 
 import com.eltex.androidschool.databinding.ActivityMainBinding
+import com.eltex.androidschool.databinding.CardEventBinding
 import com.eltex.androidschool.model.Event
 import com.eltex.androidschool.repository.InMemoryEventRepository
 import com.eltex.androidschool.utils.toast
@@ -37,30 +38,41 @@ class MainActivity : AppCompatActivity() {
         viewModel.state
             .flowWithLifecycle(lifecycle)
             .onEach {
-                bindPost(binding,it.event)
+                val events = it.events
+
+                events.forEach {event ->
+                  val eventBinding =  CardEventBinding.inflate(layoutInflater, binding.root, true)
+                    bindEvent(eventBinding,event)
+
+                    eventBinding.like.setOnClickListener {
+                        viewModel.likeById(event.id)
+
+                    }
+
+                    eventBinding.event.setOnClickListener {
+                        viewModel.participateById(event.id)
+                    }
+
+                    eventBinding.menu.setOnClickListener {
+                        toast(R.string.not_implemented, false)
+                    }
+
+                    eventBinding.share.setOnClickListener {
+                        toast(R.string.not_implemented, false)
+                    }
+
+
+                }
             }.launchIn(lifecycleScope)
 
 
 
-        binding.like.setOnClickListener {
-            viewModel.like()
 
-        }
-
-        binding.event.setOnClickListener {
-            viewModel.participate()
-        }
-
-        binding.menu.setOnClickListener {
-            toast(R.string.not_implemented, false)
-        }
-
-        binding.share.setOnClickListener {
-            toast(R.string.not_implemented, false)
-        }
     }
 
-    private fun bindPost(binding: ActivityMainBinding, event: Event) {
+    private fun bindEvent(
+        binding:CardEventBinding,
+        event: Event) {
         binding.author.text = event.author
         binding.content.text = event.content
         binding.published.text = event.published
