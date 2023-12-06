@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.state
             .flowWithLifecycle(lifecycle)
             .onEach {
-                adapter.events = it.events
+                adapter.submitList(it.events)
 
                // binding.container.removeAllViews()
                // val events = it.events
