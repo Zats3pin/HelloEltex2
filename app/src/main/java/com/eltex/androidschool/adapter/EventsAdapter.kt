@@ -24,6 +24,22 @@ class EventsAdapter(private val likeClickListener: (Event) -> Unit
         return viewHolder
     }
 
+    override fun onBindViewHolder(
+        holder: EventViewHolder,
+        position: Int,
+        payloads: List<Any>
+    ) {
+        if(payloads.isNotEmpty()) {
+            payloads.forEach {
+                if (it is EventPayLoad) {
+                    holder.bindEvent(it)
+                }
+            }
+        }else{
+            onBindViewHolder(holder,position)
+        }
+    }
+
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         holder.bindEvent(getItem(position))
     }

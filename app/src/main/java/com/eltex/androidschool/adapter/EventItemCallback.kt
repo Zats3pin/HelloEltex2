@@ -13,6 +13,10 @@ class EventItemCallback : ItemCallback<Event>() {
     override fun areContentsTheSame(oldItem: Event, newItem: Event): Boolean =
         oldItem == newItem
 
+    override fun getChangePayload(oldItem: Event, newItem: Event): Any? =
+        EventPayLoad(
+            liked = newItem.likedByMe.takeIf { it != oldItem.likedByMe },
+        )
+            .takeIf { it.isNotEmpty()  }
+    }
 
-
-}

@@ -10,6 +10,14 @@ class EventViewHolder(
     private val binding: CardEventBinding,
 ) : RecyclerView.ViewHolder(binding.root)
 {
+
+    fun bindEvent(payLoad: EventPayLoad){
+        if(payLoad.liked != null){
+            updateLike(payLoad.liked)
+        }
+        //dobav participated
+    }
+
     fun bindEvent(
         event: Event) {
         binding.author.text = event.author
@@ -23,32 +31,42 @@ class EventViewHolder(
             "offline"
         }
         binding.timeStatus.text = event.timeStatus
+        updateLike(event.likedByMe)
+        updateParticipated(event.participatedByMe)
+
+
+    }
+
+
+    private fun updateLike(likedByMe :Boolean){
+
         binding.like.setIconResource(
-            if (event.likedByMe) {
+            if (likedByMe) {
                 R.drawable.favorit_like
             } else {
                 R.drawable.baseline_favorite_border_24
             }
         )
-        binding.like.text = if (event.likedByMe) {
-            1
-        } else {
-            0
-        }.toString()
-
-        binding.event.setIconResource(
-            if (event.participatedByMe) {
-                R.drawable.event_true
-            } else {
-                R.drawable.event
-            }
-        )
-        binding.event.text = if (event.participatedByMe) {
+        binding.like.text = if (likedByMe) {
             1
         } else {
             0
         }.toString()
     }
 
+    private fun updateParticipated(participatedByMe: Boolean){
+        binding.event.setIconResource(
+            if (participatedByMe) {
+                R.drawable.event_true
+            } else {
+                R.drawable.event
+            }
+        )
+        binding.event.text = if (participatedByMe) {
+            1
+        } else {
+            0
+        }.toString()
+    }
 
 }
