@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.eltex.androidschool.adapter.EventsAdapter
+import com.eltex.androidschool.adapter.OffsetDecoration
 
 import com.eltex.androidschool.databinding.ActivityMainBinding
 import com.eltex.androidschool.databinding.CardEventBinding
@@ -41,6 +42,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.root.adapter = adapter
+
+        binding.root.addItemDecoration(OffsetDecoration(resources.getDimensionPixelSize(R.dimen.small_spacing)))
 
         viewModel.state
             .flowWithLifecycle(lifecycle)
