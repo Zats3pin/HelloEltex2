@@ -67,9 +67,9 @@ class MainActivity : AppCompatActivity() {
         binding.initial.text = event.author.take(1)
         binding.link.text = event.link
         binding.status.text = if (event.status) {
-            "Online"
+            getString(R.string.event_online)
         } else {
-            "Offline"
+            getString(R.string.event_offline)
         }
         binding.timeStatus.text = event.timeStatus
         binding.like.setIconResource(

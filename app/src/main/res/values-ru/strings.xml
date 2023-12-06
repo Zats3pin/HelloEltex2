@@ -7,5 +7,7 @@
     <string name="likes">лайки</string>
     <string name="share">переслать</string>
     <string name="event">событие</string>
+    <string name="event_online">онлайн</string>
+    <string name="event_offline">оффлайн</string>
     <string name="not_implemented">Не реализовано</string>
 </resources>
