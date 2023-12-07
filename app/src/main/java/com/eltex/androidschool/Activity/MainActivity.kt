@@ -71,6 +71,9 @@ class MainActivity : AppCompatActivity() {
             },
             menuClickListener = {
                 toast(R.string.not_implemented, false) },
+            deleteClickListener = {
+                viewModel.deleteById(it.id)
+            },
         )
 
         binding.list.adapter = adapter
