@@ -8,24 +8,22 @@ import com.eltex.androidschool.databinding.ActivityNewPostBinding
 import com.eltex.androidschool.utils.toast
 
 class NewPostActivity : AppCompatActivity() {
-    private var eventNewId: Long = -1
-    private var eventNewContent: String = ""
+    private var eventId: Long = -1
+    private var eventContent: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityNewPostBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
-
         val intentEventData = intent.getLongExtra("event_id", -1)
         if (intentEventData != -1L) {
-            if (intentEventData == -2L) eventNewId = -1
-            else eventNewId = intentEventData
-            eventNewContent = intent.getStringExtra("event_content") ?: ""
-            binding.content.setText(eventNewContent)
-            } else {
-            eventNewId = -1
-            }
+            eventId = intentEventData
+            eventContent = intent.getStringExtra("event_content") ?: ""
+            binding.content.setText(eventContent)
+        } else {
+            eventId = -1
+        }
+
 
 
 

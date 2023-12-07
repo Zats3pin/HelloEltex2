@@ -39,13 +39,12 @@ class MainActivity : AppCompatActivity() {
         val newPostContract =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 val content = it.data?.getStringExtra(Intent.EXTRA_TEXT)
-                val eventId = it.data?.getLongExtra("id", -1)
+                val eventId = it.data?.getLongExtra("event_id", -1)
                 if (content != null && eventId == -1L) {
                     viewModel.addPost(content)
 
                 } else {
                     viewModel.editById(eventId, content)
-
                 }
             }
 
@@ -56,9 +55,6 @@ class MainActivity : AppCompatActivity() {
             val text = intent.getStringExtra(Intent.EXTRA_TEXT)
             intent.removeExtra(Intent.EXTRA_TEXT) // Удаляем, чтобы при повороте экрана снова не открывалась активити
             val intent = Intent(applicationContext, NewPostActivity::class.java)
-            intent.putExtra("event_id", -2L)
-            intent.putExtra("event_content", text)
-            newPostContract.launch(intent)
         }
 
         setContentView(binding.root)
@@ -100,6 +96,7 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra("event_id", event.id)
                 intent.putExtra("event_content", event.content)
                 newPostContract.launch(intent)
+                viewModel.deleteById(event.id)
             }
         })
 
