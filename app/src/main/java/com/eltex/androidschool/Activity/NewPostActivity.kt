@@ -19,12 +19,14 @@ class NewPostActivity : AppCompatActivity() {
 
         val intentEventData = intent.getLongExtra("event_id", -1)
         if (intentEventData != -1L) {
-            eventNewId = intentEventData
+            if (intentEventData == -2L) eventNewId = -1
+            else eventNewId = intentEventData
             eventNewContent = intent.getStringExtra("event_content") ?: ""
             binding.content.setText(eventNewContent)
-        } else {
+            } else {
             eventNewId = -1
-        }
+            }
+
 
 
         binding.toolbar.setOnMenuItemClickListener {

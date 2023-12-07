@@ -52,6 +52,14 @@ class MainActivity : AppCompatActivity() {
         binding.newPost.setOnClickListener {
             newPostContract.launch(Intent(this, NewPostActivity::class.java))
         }
+        if (intent.action == Intent.ACTION_SEND) { // Обязательно проверьте соответствует ли action ожидаемому
+            val text = intent.getStringExtra(Intent.EXTRA_TEXT)
+            intent.removeExtra(Intent.EXTRA_TEXT) // Удаляем, чтобы при повороте экрана снова не открывалась активити
+            val intent = Intent(applicationContext, NewPostActivity::class.java)
+            intent.putExtra("event_id", -2L)
+            intent.putExtra("event_content", text)
+            newPostContract.launch(intent)
+        }
 
         setContentView(binding.root)
 
