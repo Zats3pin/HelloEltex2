@@ -32,5 +32,9 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
 
     }
 
+    fun addPost(content: String) {
+        repository.addPost(content)
+    }
+
 
 }

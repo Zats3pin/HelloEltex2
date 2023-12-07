@@ -1,6 +1,7 @@
 package com.eltex.androidschool.repository
 
 
+import com.eltex.androidschool.R
 import com.eltex.androidschool.model.Event
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +22,8 @@ class InMemoryEventRepository : EventRepository {
             participatedByMe = false,
         )
     }.reversed())
+
+    private var nextId = state.value.first().id
 
     override fun getPost(): Flow<List<Event>> = state.asStateFlow()
 
@@ -48,5 +51,24 @@ class InMemoryEventRepository : EventRepository {
         }
     }
 
+    override fun addPost(content: String) {
+        state.update { events ->
+            buildList(events.size + 1) {
+                add(Event(
+                        id = ++nextId,
+                        content = content,
+                        author = "me",
+                        published = "Now",
+                        likedByMe = false,
+                        link = "https://m2.material.io/components/cards",
+                        status = false,
+                        timeStatus = "16.05.22 12:00",
+                        participatedByMe = false
+                    )
+                )
+                addAll(events)
+            }
+        }
+    }
 
 }

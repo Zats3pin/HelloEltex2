@@ -14,4 +14,6 @@
     <string name="new_post_title">New post</string>
     <string name="content">content</string>
     <string name="new_post_description">New post</string>
+    <string name="post_empty_error">Content must not be blank</string>
+    <string name="me">Me</string>
 </resources>

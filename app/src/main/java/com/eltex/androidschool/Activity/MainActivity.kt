@@ -3,6 +3,8 @@ package com.eltex.androidschool.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -31,11 +33,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val binding = ActivityMainBinding.inflate(layoutInflater)
+        val binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
+
+        val newPostContract =  registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+           val content =  it.data?.getStringExtra(Intent.EXTRA_TEXT)
+
+            if (content != null){
+                viewModel.addPost(content)
+            }
+        }
 
         binding.newPost.setOnClickListener {
-            val intent = Intent(this, NewPostActivity::class.java)
-            startActivity(intent)
+            newPostContract.launch(Intent(this, NewPostActivity::class.java))
         }
 
         setContentView(binding.root)
