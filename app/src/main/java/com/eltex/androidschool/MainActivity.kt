@@ -1,5 +1,6 @@
 package com.eltex.androidschool
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -34,10 +35,27 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val adapter = EventsAdapter(
-            likeClickListener = { viewModel.likeById(it.id) },
-            participatedClickListener = { viewModel.participatedById(it.id) },
-            shareClickListener = { toast(R.string.not_implemented, false) },
-            menuClickListener = { toast(R.string.not_implemented, false) },
+            likeClickListener = {
+                viewModel.likeById(it.id)
+            },
+            participatedClickListener = {
+                viewModel.participatedById(it.id)
+            },
+            shareClickListener = { event ->
+                val intent = Intent()
+                    .setAction(Intent.ACTION_SEND)
+                    .putExtra(
+                        Intent.EXTRA_TEXT,
+                        getString(R.string.share_text, event.author, event.content)
+                    )
+                    .setType("text/plain")
+
+                val chooser = Intent.createChooser(intent, null)
+
+                startActivity(chooser)
+            },
+            menuClickListener = {
+                toast(R.string.not_implemented, false) },
         )
 
         binding.root.adapter = adapter
