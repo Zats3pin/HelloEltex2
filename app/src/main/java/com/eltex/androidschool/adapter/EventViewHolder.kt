@@ -26,11 +26,13 @@ class EventViewHolder(
         binding.published.text = event.published
         binding.initial.text = event.author.take(1)
         binding.link.text = event.link
-        binding.status.text = if (event.status) ({
-            R.string.event_online
-        }).toString() else ({
-            R.string.event_offline
-        }).toString()
+
+        binding.status.text = if (event.status) {
+            "online"
+        } else {
+            "offline"
+        }
+
         binding.timeStatus.text = event.timeStatus
         updateLike(event.likedByMe)
         updateParticipated(event.participatedByMe)
