@@ -1,4 +1,4 @@
-package com.eltex.androidschool
+package com.eltex.androidschool.Activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +8,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.eltex.androidschool.R
 import com.eltex.androidschool.adapter.EventsAdapter
 import com.eltex.androidschool.adapter.OffsetDecoration
 import com.eltex.androidschool.databinding.ActivityMainBinding
@@ -31,6 +32,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         val binding = ActivityMainBinding.inflate(layoutInflater)
+
+        binding.newPost.setOnClickListener {
+            val intent = Intent(this, NewPostActivity::class.java)
+            startActivity(intent)
+        }
 
         setContentView(binding.root)
 
@@ -58,9 +64,9 @@ class MainActivity : AppCompatActivity() {
                 toast(R.string.not_implemented, false) },
         )
 
-        binding.root.adapter = adapter
+        binding.list.adapter = adapter
 
-        binding.root.addItemDecoration(OffsetDecoration(resources.getDimensionPixelSize(R.dimen.small_spacing)))
+        binding.list.addItemDecoration(OffsetDecoration(resources.getDimensionPixelSize(R.dimen.small_spacing)))
 
         viewModel.state.flowWithLifecycle(lifecycle).onEach {
             adapter.submitList(it.events)
