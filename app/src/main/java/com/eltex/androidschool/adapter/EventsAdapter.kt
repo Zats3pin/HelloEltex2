@@ -9,12 +9,18 @@ import com.eltex.androidschool.databinding.CardEventBinding
 import com.eltex.androidschool.model.Event
 
 class EventsAdapter(
-    private val likeClickListener: (Event) -> Unit,
-    private val participatedClickListener: (Event) -> Unit,
-    private val shareClickListener: (Event) -> Unit,
-    private val menuClickListener: (Event) -> Unit,
-    private val deleteClickListener: (Event) -> Unit,
+    private val listener: EventListener
 ) : ListAdapter<Event, EventViewHolder>(EventItemCallback()) {
+
+    interface EventListener{
+        fun onLikeClickListener(event: Event)
+        fun onParticipatedClickListener(event: Event)
+        fun onShareClickListener(event: Event)
+        fun onMenuClickListener(event: Event)
+        fun onDeleteClickListener(event: Event)
+
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -22,19 +28,19 @@ class EventsAdapter(
         val viewHolder = EventViewHolder(eventBinding)
 
         eventBinding.like.setOnClickListener {
-            likeClickListener(getItem(viewHolder.adapterPosition))
+            listener.onLikeClickListener(getItem(viewHolder.adapterPosition))
         }
 
         eventBinding.participated.setOnClickListener {
-            participatedClickListener(getItem(viewHolder.adapterPosition))
+            listener.onParticipatedClickListener(getItem(viewHolder.adapterPosition))
         }
 
         eventBinding.share.setOnClickListener {
-            shareClickListener(getItem(viewHolder.adapterPosition))
+            listener.onShareClickListener(getItem(viewHolder.adapterPosition))
         }
 
         eventBinding.menu.setOnClickListener {
-            menuClickListener(getItem(viewHolder.adapterPosition))
+            listener.onMenuClickListener(getItem(viewHolder.adapterPosition))
         }
 
         eventBinding.menu.setOnClickListener {
@@ -44,7 +50,7 @@ class EventsAdapter(
                 setOnMenuItemClickListener {item ->
                     when(item.itemId){
                         R.id.delete ->{
-                            deleteClickListener(getItem(viewHolder.adapterPosition))
+                            listener.onDeleteClickListener(getItem(viewHolder.adapterPosition))
                             true
                         }
                         else-> false
