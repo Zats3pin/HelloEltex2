@@ -12,14 +12,15 @@ class EventsAdapter(
     private val listener: EventListener
 ) : ListAdapter<Event, EventViewHolder>(EventItemCallback()) {
 
-    interface EventListener{
+    interface EventListener {
         fun onLikeClickListener(event: Event)
         fun onParticipatedClickListener(event: Event)
+        fun onMenuClickListener(event: Event)
         fun onShareClickListener(event: Event)
         fun onDeleteClickListener(event: Event)
+        fun onEditClickListener(event: Event)
 
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -40,16 +41,24 @@ class EventsAdapter(
 
 
         eventBinding.menu.setOnClickListener {
-            PopupMenu(it.context,it).apply {
+            PopupMenu(it.context, it).apply {
                 inflate(R.menu.post_actions_menu)
 
-                setOnMenuItemClickListener {item ->
-                    when(item.itemId){
-                        R.id.delete ->{
+                setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+
+                        R.id.edit -> {
+                            listener.onEditClickListener(getItem(viewHolder.adapterPosition))
+                            true
+                        }
+
+                        R.id.delete -> {
                             listener.onDeleteClickListener(getItem(viewHolder.adapterPosition))
                             true
                         }
-                        else-> false
+
+
+                        else -> false
                     }
                 }
                 show()

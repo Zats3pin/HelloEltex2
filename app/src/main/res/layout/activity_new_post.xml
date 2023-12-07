@@ -8,31 +8,30 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        app:menu="@menu/new_post_menu"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         style="@style/Widget.Material3.Toolbar"
-        app:navigationIcon="?homeAsUpIndicator"
-        app:title="@string/new_post_title"
         android:layout_width="0dp"
-        android:layout_height="wrap_content" />
-    
-    
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/new_post_menu"
+        app:navigationIcon="?homeAsUpIndicator"
+        app:title="@string/new_post_title" />
+
+
     <EditText
         android:id="@+id/content"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@android:color/transparent"
+        android:gravity="top"
+        android:hint="@string/content"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
+        android:padding="@dimen/common_spacing"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_width="0dp"
-        android:padding="@dimen/common_spacing"
-        android:inputType="textMultiLine"
-        android:layout_height="0dp"
-        android:importantForAutofill="no"
-        android:hint="@string/content"
-        android:gravity="top"
-        android:background="@android:color/transparent"
-        />
-    
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

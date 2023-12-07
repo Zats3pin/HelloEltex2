@@ -10,4 +10,6 @@ interface EventRepository {
      fun addPost(content: String)
 
     fun deleteById(id: Long)
+
+    fun editById(id: Long?, content: String?)
 }

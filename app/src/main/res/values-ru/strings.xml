@@ -11,4 +11,11 @@
     <string name="event_offline">оффлайн</string>
     <string name="not_implemented">Не реализовано</string>
     <string name="share_text" >Автор: %s, контент: %s</string>
+    <string name="save_post">сохранить пост</string>
+    <string name="new_post_title">новый пост</string>
+    <string name="content">контент</string>
+    <string name="new_post_description">новый пост</string>
+    <string name="post_empty_error">Содержимое не должно быть пустым</string>
+    <string name="me">я</string>
+    <string name="delete_post">удалить пост</string>
 </resources>

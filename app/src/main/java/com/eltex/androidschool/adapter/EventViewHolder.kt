@@ -26,14 +26,11 @@ class EventViewHolder(
         binding.published.text = event.published
         binding.initial.text = event.author.take(1)
         binding.link.text = event.link
-
         binding.status.text = event.status
-
         binding.timeStatus.text = event.timeStatus
         updateLike(event.likedByMe)
         updateParticipated(event.participatedByMe)
     }
-
 
     private fun updateLike(likedByMe: Boolean) {
 

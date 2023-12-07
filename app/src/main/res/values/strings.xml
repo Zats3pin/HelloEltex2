@@ -17,4 +17,5 @@
     <string name="post_empty_error">Content must not be blank</string>
     <string name="me">Me</string>
     <string name="delete_post">delete post</string>
+    <string name="edit_post">edit post</string>
 </resources>

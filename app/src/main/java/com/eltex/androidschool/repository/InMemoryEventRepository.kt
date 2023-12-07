@@ -1,7 +1,7 @@
 package com.eltex.androidschool.repository
 
 
-import com.eltex.androidschool.R
+
 import com.eltex.androidschool.model.Event
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class InMemoryEventRepository : EventRepository {
-    private val state = MutableStateFlow(List(100) {
+    private val state = MutableStateFlow(List(10) {
         Event(
             id = (it + 1).toLong(),
             content = "$it Приглашаю провести уютный вечер за увлекательными играми! У нас есть несколько вариантов настолок, подходящих для любой компании.",
@@ -54,7 +54,8 @@ class InMemoryEventRepository : EventRepository {
     override fun addPost(content: String) {
         state.update { events ->
             buildList(events.size + 1) {
-                add(Event(
+                add(
+                    Event(
                         id = ++nextId,
                         content = content,
                         author = "me",
@@ -79,7 +80,17 @@ class InMemoryEventRepository : EventRepository {
         }
     }
 
+    override fun editById(id: Long?, content: String?) {
+        state.update { events ->
+            events.map { event ->
+                if (event.id == id) {
+                    event.copy(content = content.toString())
+                } else {
+                    event
+                }
+            }
+        }
 
 
-
+    }
 }

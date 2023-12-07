@@ -25,6 +25,8 @@ import kotlinx.coroutines.flow.onEach
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val binding = ActivityMainBinding.inflate(LayoutInflater.from(this))//
+
 
         val viewModel by viewModels<EventViewModel> {
             viewModelFactory {
@@ -34,15 +36,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
+        val newPostContract =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                val content = it.data?.getStringExtra(Intent.EXTRA_TEXT)
+                val eventId = it.data?.getLongExtra("id", -1)
+                if (content != null && eventId == -1L) {
+                    viewModel.addPost(content)
 
-        val newPostContract =  registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-           val content =  it.data?.getStringExtra(Intent.EXTRA_TEXT)
+                } else {
+                    viewModel.editById(eventId, content)
 
-            if (content != null){
-                viewModel.addPost(content)
+                }
             }
-        }
 
         binding.newPost.setOnClickListener {
             newPostContract.launch(Intent(this, NewPostActivity::class.java))
@@ -50,39 +55,45 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        val adapter = EventsAdapter(
-            object : EventsAdapter.EventListener{
+        val adapter = EventsAdapter(object : EventsAdapter.EventListener {
 
 
-
-                override fun onLikeClickListener(event: Event) {
-                    viewModel.likeById(event.id)
-                }
-
-                override fun onParticipatedClickListener(event: Event) {
-                    viewModel.participatedById(event.id)
-                }
-
-                override fun onShareClickListener(event: Event) {
-                    val intent = Intent()
-                        .setAction(Intent.ACTION_SEND)
-                        .putExtra(
-                            Intent.EXTRA_TEXT,
-                            getString(R.string.share_text, event.author, event.content)
-                        )
-                        .setType("text/plain")
-
-                    val chooser = Intent.createChooser(intent, null)
-
-                    startActivity(chooser)
-                }
-
-                override fun onDeleteClickListener(event: Event) {
-                    viewModel.deleteById(event.id)
-                }
+            override fun onLikeClickListener(event: Event) {
+                viewModel.likeById(event.id)
             }
 
-        )
+            override fun onParticipatedClickListener(event: Event) {
+                viewModel.participatedById(event.id)
+            }
+
+            override fun onShareClickListener(event: Event) {
+                val intent = Intent().setAction(Intent.ACTION_SEND).putExtra(
+                    Intent.EXTRA_TEXT, getString(R.string.share_text, event.author, event.content)
+                ).setType("text/plain")
+
+                val chooser = Intent.createChooser(intent, null)
+
+                startActivity(chooser)
+            }
+
+
+            override fun onMenuClickListener(event: Event) {
+                toast(R.string.not_implemented, false)
+            }
+
+
+            override fun onDeleteClickListener(event: Event) {
+                viewModel.deleteById(event.id)
+            }
+
+
+            override fun onEditClickListener(event: Event) {
+                val intent = Intent(applicationContext, NewPostActivity::class.java)
+                intent.putExtra("event_id", event.id)
+                intent.putExtra("event_content", event.content)
+                newPostContract.launch(intent)
+            }
+        })
 
         binding.list.adapter = adapter
 
@@ -91,10 +102,6 @@ class MainActivity : AppCompatActivity() {
         viewModel.state.flowWithLifecycle(lifecycle).onEach {
             adapter.submitList(it.events)
         }.launchIn(lifecycleScope)
-
-
     }
-
-
 }
 

@@ -12,10 +12,7 @@ class OffsetDecoration(
 ) : ItemDecoration() {
 
     override fun getItemOffsets(
-        outRect: Rect,
-        view: View,
-        parent: RecyclerView,
-        state: RecyclerView.State
+        outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
     ) {
         outRect.top += offset
         outRect.left += offset
