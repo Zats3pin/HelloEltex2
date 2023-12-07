@@ -21,5 +21,10 @@ class NewPostActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
+        binding.toolbar.setNavigationOnClickListener {
+         onBackPressedDispatcher.onBackPressed()
+        }
+
     }
 }
