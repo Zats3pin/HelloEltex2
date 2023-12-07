@@ -17,7 +17,7 @@ class InMemoryEventRepository : EventRepository {
             published = "11.05.22 11:21",
             likedByMe = false,
             link = "https://m2.material.io/components/cards",
-            status = false,
+            status = "offline",
             timeStatus = "16.05.22 12:00",
             participatedByMe = false,
         )
@@ -61,7 +61,7 @@ class InMemoryEventRepository : EventRepository {
                         published = "Now",
                         likedByMe = false,
                         link = "https://m2.material.io/components/cards",
-                        status = false,
+                        status = "offline",
                         timeStatus = "16.05.22 12:00",
                         participatedByMe = false
                     )

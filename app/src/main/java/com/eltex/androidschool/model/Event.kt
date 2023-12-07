@@ -7,7 +7,7 @@ data class Event(
     val published: String = "",
     val likedByMe: Boolean = false,
     val link: String = "",
-    val status: Boolean = false,
+    val status: String = "",
     val timeStatus: String = "",
     val participatedByMe: Boolean = false,
     )
