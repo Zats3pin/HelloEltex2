@@ -77,10 +77,6 @@ class MainActivity : AppCompatActivity() {
                     startActivity(chooser)
                 }
 
-                override fun onMenuClickListener(event: Event) {
-                    toast(R.string.not_implemented, false)
-                }
-
                 override fun onDeleteClickListener(event: Event) {
                     viewModel.deleteById(event.id)
                 }

@@ -16,7 +16,6 @@ class EventsAdapter(
         fun onLikeClickListener(event: Event)
         fun onParticipatedClickListener(event: Event)
         fun onShareClickListener(event: Event)
-        fun onMenuClickListener(event: Event)
         fun onDeleteClickListener(event: Event)
 
     }
@@ -39,9 +38,6 @@ class EventsAdapter(
             listener.onShareClickListener(getItem(viewHolder.adapterPosition))
         }
 
-        eventBinding.menu.setOnClickListener {
-            listener.onMenuClickListener(getItem(viewHolder.adapterPosition))
-        }
 
         eventBinding.menu.setOnClickListener {
             PopupMenu(it.context,it).apply {
