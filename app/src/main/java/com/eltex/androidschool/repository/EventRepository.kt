@@ -6,6 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface EventRepository {
     fun getPost(): Flow<List<Event>>
     fun likeById(id: Long)
-
-    fun participateById(id: Long)
+    fun participatedById(id: Long)
 }

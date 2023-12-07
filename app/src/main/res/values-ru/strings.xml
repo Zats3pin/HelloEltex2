@@ -10,4 +10,5 @@
     <string name="event_online">онлайн</string>
     <string name="event_offline">оффлайн</string>
     <string name="not_implemented">Не реализовано</string>
+
 </resources>

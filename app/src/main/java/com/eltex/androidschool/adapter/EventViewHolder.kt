@@ -1,6 +1,5 @@
 package com.eltex.androidschool.adapter
 
-import android.provider.Settings.Secure.getString
 import androidx.recyclerview.widget.RecyclerView
 import com.eltex.androidschool.R
 import com.eltex.androidschool.databinding.CardEventBinding
@@ -8,37 +7,37 @@ import com.eltex.androidschool.model.Event
 
 class EventViewHolder(
     private val binding: CardEventBinding,
-) : RecyclerView.ViewHolder(binding.root)
-{
+) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bindEvent(payLoad: EventPayLoad){
-        if(payLoad.liked != null){
+    fun bindEvent(payLoad: EventPayLoad) {
+        if (payLoad.liked != null) {
             updateLike(payLoad.liked)
         }
-        //dobav participated
+        if (payLoad.participated != null) {
+            updateParticipated(payLoad.participated)
+        }
     }
 
     fun bindEvent(
-        event: Event) {
+        event: Event
+    ) {
         binding.author.text = event.author
         binding.content.text = event.content
         binding.published.text = event.published
         binding.initial.text = event.author.take(1)
         binding.link.text = event.link
-        binding.status.text = if (event.status) {
-            "online"
-        } else {
-            "offline"
-        }
+        binding.status.text = if (event.status) ({
+            R.string.event_online
+        }).toString() else ({
+            R.string.event_offline
+        }).toString()
         binding.timeStatus.text = event.timeStatus
         updateLike(event.likedByMe)
         updateParticipated(event.participatedByMe)
-
-
     }
 
 
-    private fun updateLike(likedByMe :Boolean){
+    private fun updateLike(likedByMe: Boolean) {
 
         binding.like.setIconResource(
             if (likedByMe) {
@@ -54,15 +53,15 @@ class EventViewHolder(
         }.toString()
     }
 
-    private fun updateParticipated(participatedByMe: Boolean){
-        binding.event.setIconResource(
+    private fun updateParticipated(participatedByMe: Boolean) {
+        binding.participated.setIconResource(
             if (participatedByMe) {
                 R.drawable.event_true
             } else {
                 R.drawable.event
             }
         )
-        binding.event.text = if (participatedByMe) {
+        binding.participated.text = if (participatedByMe) {
             1
         } else {
             0

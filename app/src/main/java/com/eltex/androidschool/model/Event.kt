@@ -10,6 +10,4 @@ data class Event(
     val status: Boolean = false,
     val timeStatus: String = "",
     val participatedByMe: Boolean = false,
-
-
     )

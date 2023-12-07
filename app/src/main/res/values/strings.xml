@@ -9,4 +9,5 @@
     <string name="event_online" >online</string>
     <string name="event_offline" >offline</string>
     <string name="not_implemented" >Not implemented</string>
+
 </resources>

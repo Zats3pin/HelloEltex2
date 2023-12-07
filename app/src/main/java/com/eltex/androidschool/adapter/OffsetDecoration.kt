@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 
 class OffsetDecoration(
     @Px private val offset: Int
-) : ItemDecoration(){
+) : ItemDecoration() {
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -20,10 +20,11 @@ class OffsetDecoration(
         outRect.top += offset
         outRect.left += offset
         outRect.right += offset
-       val lastIndex = parent.adapter?.itemCount?.minus(1)
-        val lastViewElement = (parent.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+        val lastIndex = parent.adapter?.itemCount?.minus(1)
+        val lastViewElement =
+            (parent.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
 
-        if (lastIndex == lastViewElement){
+        if (lastIndex == lastViewElement) {
             outRect.bottom += offset
         }
     }
