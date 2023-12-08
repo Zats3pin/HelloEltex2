@@ -41,7 +41,7 @@ class LocalEventsRepository(private val context: Context) : EventRepository {
 
     }
 
-    private fun readId(): Long = preferences.getLong(LocalEventsRepository.ID_KEY, 0L)
+    private fun readId(): Long = preferences.getLong(ID_KEY, 0L)
 
     override fun getPost(): Flow<List<Event>> = state.asStateFlow()
 
@@ -118,7 +118,7 @@ class LocalEventsRepository(private val context: Context) : EventRepository {
 
     private fun sync() {
         preferences.edit {
-            putLong(LocalEventsRepository.ID_KEY, nextId)
+            putLong(ID_KEY, nextId)
         }
 
         context.filesDir.resolve(EVENT_FIlE_NAME)

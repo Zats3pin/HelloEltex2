@@ -1,4 +1,4 @@
-package com.eltex.androidschool.Activity
+package com.eltex.androidschool.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -56,6 +56,9 @@ class MainActivity : AppCompatActivity() {
             val text = intent.getStringExtra(Intent.EXTRA_TEXT)
             intent.removeExtra(Intent.EXTRA_TEXT) // Удаляем, чтобы при повороте экрана снова не открывалась активити
             val intent = Intent(applicationContext, NewPostActivity::class.java)
+            intent.putExtra("event_id", -2L)
+            intent.putExtra("event_content", text)
+            newPostContract.launch(intent)
         }
 
         setContentView(binding.root)
@@ -97,7 +100,7 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra("event_id", event.id)
                 intent.putExtra("event_content", event.content)
                 newPostContract.launch(intent)
-                    //viewModel.deleteById(event.id)
+                //viewModel.deleteById(event.id)
             }
         })
 

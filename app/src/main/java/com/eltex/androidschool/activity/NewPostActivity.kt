@@ -1,4 +1,4 @@
-package com.eltex.androidschool.Activity
+package com.eltex.androidschool.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -34,8 +34,8 @@ class NewPostActivity : AppCompatActivity() {
 
                     if (content.isNotBlank()) {
                         setResult(
-                            RESULT_OK, Intent()
-                                .putExtra(Intent.EXTRA_TEXT, content)
+                            RESULT_OK,
+                            Intent().putExtra(Intent.EXTRA_TEXT, content)
                                 .putExtra("event_id", eventId)
                         )
                         finish()
