@@ -15,6 +15,7 @@ import com.eltex.androidschool.adapter.EventsAdapter
 import com.eltex.androidschool.adapter.OffsetDecoration
 import com.eltex.androidschool.databinding.ActivityMainBinding
 import com.eltex.androidschool.model.Event
+import com.eltex.androidschool.repository.FileEventReposipory
 import com.eltex.androidschool.repository.InMemoryEventRepository
 import com.eltex.androidschool.repository.SharedPreferencesEventRepository
 import com.eltex.androidschool.utils.toast
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         val viewModel by viewModels<EventViewModel> {
             viewModelFactory {
                 initializer {
-                    EventViewModel(SharedPreferencesEventRepository(applicationContext))
+                    EventViewModel(FileEventReposipory(applicationContext))
                 }
             }
         }

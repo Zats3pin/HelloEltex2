@@ -9,25 +9,27 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-
-class SharedPreferencesEventRepository(context: Context) : EventRepository {
+class FileEventReposipory(private val context: Context) : EventRepository {
 
     private companion object {
-        const val EVENT_KEY = "EVENT_KEY"
-        const val ID_KEY = "ID_KEY"
+        const val EVENT_FIlE_NAME = "event.json"
+        const val ID_FILE_NAME = "id.txt"
     }
 
-    private val preferences = context.getSharedPreferences("events", Context.MODE_PRIVATE)
     private val state = MutableStateFlow(readEvents())
     private var nextId = readId()
 
-
-
-    private fun readId(): Long = preferences.getLong(ID_KEY,0L)
-
-
     private fun readEvents() : List<Event>{
-        val serializedEvents = preferences.getString(EVENT_KEY,null)
+        val file = context.filesDir.resolve(EVENT_FIlE_NAME)
+
+        val serializedEvents = if(file.exists()){
+            file.bufferedReader()
+                .use {
+                    it.readLine()
+                }
+        }else{
+            null
+        }
 
         return if (serializedEvents != null) {
             Json.decodeFromString(serializedEvents)
@@ -35,6 +37,18 @@ class SharedPreferencesEventRepository(context: Context) : EventRepository {
             emptyList()
         }
 
+    }
+
+    private fun readId(): Long {
+        val file = context.filesDir.resolve(ID_FILE_NAME)
+         return if(file.exists()){
+            file.bufferedReader()
+                .use {
+                    it.readLine()?.toLong() ?: 0L
+                }
+        }else{
+             0L
+        }
     }
 
     override fun getPost(): Flow<List<Event>> = state.asStateFlow()
@@ -110,10 +124,18 @@ class SharedPreferencesEventRepository(context: Context) : EventRepository {
 
     }
     private fun sync(){
-        preferences.edit {
-            putLong(ID_KEY, nextId)
-            putString(EVENT_KEY, Json.encodeToString(state.value))
-        }
+       context.filesDir.resolve(ID_FILE_NAME)
+        .bufferedWriter()
+            .use {
+                it.write(nextId.toString())
+            }
+        context.filesDir.resolve(EVENT_FIlE_NAME)
+            .bufferedWriter()
+            .use {
+                it.write(Json.encodeToString(state.value))
+            }
+
+
     }
 
 
