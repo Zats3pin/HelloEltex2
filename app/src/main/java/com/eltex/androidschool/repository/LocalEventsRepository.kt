@@ -1,29 +1,47 @@
 package com.eltex.androidschool.repository
 
-
-
+import android.content.Context
+import androidx.core.content.edit
 import com.eltex.androidschool.model.Event
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
-class InMemoryEventRepository : EventRepository {
-    private val state = MutableStateFlow(List(10) {
-        Event(
-            id = (it + 1).toLong(),
-            content = "$it Приглашаю провести уютный вечер за увлекательными играми! У нас есть несколько вариантов настолок, подходящих для любой компании.",
-            author = "Lydia Westervelt",
-            published = "11.05.22 11:21",
-            likedByMe = false,
-            link = "https://m2.material.io/components/cards",
-            status = "offline",
-            timeStatus = "16.05.22 12:00",
-            participatedByMe = false,
-        )
-    }.reversed())
+class LocalEventsRepository(private val context: Context) : EventRepository {
 
-    private var nextId = state.value.first().id
+    private companion object {
+        const val EVENT_FIlE_NAME = "event.json"
+        const val ID_KEY = "ID_KEY"
+    }
+
+    private val preferences = context.getSharedPreferences("events", Context.MODE_PRIVATE)
+    private val state = MutableStateFlow(readEvents())
+    private var nextId = readId()
+
+    private fun readEvents(): List<Event> {
+        val file = context.filesDir.resolve(EVENT_FIlE_NAME)
+
+        val serializedEvents = if (file.exists()) {
+            file.bufferedReader()
+                .use {
+                    it.readLine()
+                }
+        } else {
+            null
+        }
+
+        return if (serializedEvents != null) {
+            Json.decodeFromString(serializedEvents)
+        } else {
+            emptyList()
+        }
+
+    }
+
+    private fun readId(): Long = preferences.getLong(LocalEventsRepository.ID_KEY, 0L)
 
     override fun getPost(): Flow<List<Event>> = state.asStateFlow()
 
@@ -37,6 +55,7 @@ class InMemoryEventRepository : EventRepository {
                 }
             }
         }
+        sync()
     }
 
     override fun participatedById(id: Long) {
@@ -49,6 +68,7 @@ class InMemoryEventRepository : EventRepository {
                 }
             }
         }
+        sync()
     }
 
     override fun addPost(content: String) {
@@ -70,6 +90,7 @@ class InMemoryEventRepository : EventRepository {
                 addAll(events)
             }
         }
+        sync()
     }
 
     override fun deleteById(id: Long) {
@@ -78,6 +99,7 @@ class InMemoryEventRepository : EventRepository {
                 it.id != id
             }
         }
+        sync()
     }
 
     override fun editById(id: Long?, content: String?) {
@@ -90,7 +112,23 @@ class InMemoryEventRepository : EventRepository {
                 }
             }
         }
+        sync()
+
+    }
+
+    private fun sync() {
+        preferences.edit {
+            putLong(LocalEventsRepository.ID_KEY, nextId)
+        }
+
+        context.filesDir.resolve(EVENT_FIlE_NAME)
+            .bufferedWriter()
+            .use {
+                it.write(Json.encodeToString(state.value))
+            }
 
 
     }
+
+
 }
