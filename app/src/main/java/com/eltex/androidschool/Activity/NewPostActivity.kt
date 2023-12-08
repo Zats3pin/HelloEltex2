@@ -34,7 +34,9 @@ class NewPostActivity : AppCompatActivity() {
 
                     if (content.isNotBlank()) {
                         setResult(
-                            RESULT_OK, Intent().putExtra(Intent.EXTRA_TEXT, content)
+                            RESULT_OK, Intent()
+                                .putExtra(Intent.EXTRA_TEXT, content)
+                                .putExtra("event_id", eventId)
                         )
                         finish()
                     } else {

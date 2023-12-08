@@ -18,4 +18,5 @@
     <string name="me">Me</string>
     <string name="delete_post">delete post</string>
     <string name="edit_post">edit post</string>
+    <string name="edit_post_title">edit post</string>
 </resources>

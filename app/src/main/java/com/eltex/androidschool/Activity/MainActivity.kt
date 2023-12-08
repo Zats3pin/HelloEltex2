@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
         binding.newPost.setOnClickListener {
             newPostContract.launch(Intent(this, NewPostActivity::class.java))
         }
+
         if (intent.action == Intent.ACTION_SEND) { // Обязательно проверьте соответствует ли action ожидаемому
             val text = intent.getStringExtra(Intent.EXTRA_TEXT)
             intent.removeExtra(Intent.EXTRA_TEXT) // Удаляем, чтобы при повороте экрана снова не открывалась активити
@@ -96,7 +97,7 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra("event_id", event.id)
                 intent.putExtra("event_content", event.content)
                 newPostContract.launch(intent)
-                viewModel.deleteById(event.id)
+                    //viewModel.deleteById(event.id)
             }
         })
 
