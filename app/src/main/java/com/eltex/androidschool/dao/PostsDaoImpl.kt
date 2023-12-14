@@ -4,6 +4,9 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import androidx.core.content.contentValuesOf
 import com.eltex.androidschool.model.Event
+import com.eltex.androidschool.utils.getLongOrThrow
+import com.eltex.androidschool.utils.getStringOrThrow
+import com.eltex.androidschool.utils.getBooleanOrThrow
 
 class PostsDaoImpl(private val db: SQLiteDatabase) : PostDao {
     override fun getAll(): List<Event> = db.query(
@@ -93,14 +96,14 @@ class PostsDaoImpl(private val db: SQLiteDatabase) : PostDao {
     }
 
     private fun Cursor.getPost(): Event = Event(
-        id = getLong(getColumnIndexOrThrow(PostTable.ID)),
-        content = getString(getColumnIndexOrThrow(PostTable.CONTENT)),
-        author = getString(getColumnIndexOrThrow(PostTable.PIBLISHED)),
-        published = getString(getColumnIndexOrThrow(PostTable.AUTHOR)),
-        likedByMe = getInt(getColumnIndexOrThrow(PostTable.LIKED_BY_ME)) != 0,
-        link = getString(getColumnIndexOrThrow(PostTable.LINK)),
-        status = getString(getColumnIndexOrThrow(PostTable.STATUS)),
-        timeStatus = getString(getColumnIndexOrThrow(PostTable.TIME_STATUS)),
-        participatedByMe = getInt(getColumnIndexOrThrow(PostTable.PARTICIPATED_BY_ME)) != 0,
+        id = getLongOrThrow(PostTable.ID),
+        content = getStringOrThrow(PostTable.CONTENT),
+        author = getStringOrThrow(PostTable.PIBLISHED),
+        published = getStringOrThrow(PostTable.AUTHOR),
+        likedByMe = getBooleanOrThrow(PostTable.LIKED_BY_ME),
+        link = getStringOrThrow(PostTable.LINK),
+        status = getStringOrThrow(PostTable.STATUS),
+        timeStatus = getStringOrThrow(PostTable.TIME_STATUS),
+        participatedByMe = getBooleanOrThrow(PostTable.PARTICIPATED_BY_ME)
     )
 }

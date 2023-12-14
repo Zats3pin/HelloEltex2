@@ -10,3 +10,4 @@ fun Context.toast(@StringRes res: Int, short: Boolean) {
     val length = if (short) Toast.LENGTH_SHORT else Toast.LENGTH_LONG
     Toast.makeText(this, R.string.not_implemented, length).show()
 }
+
