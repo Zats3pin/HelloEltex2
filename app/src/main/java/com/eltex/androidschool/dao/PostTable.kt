@@ -1,6 +1,6 @@
 package com.eltex.androidschool.dao
 
-import kotlinx.serialization.SerialName
+
 
 object PostTable {
     const val TABLE_NAME = "Posts"
@@ -15,18 +15,10 @@ object PostTable {
     const val PARTICIPATED_BY_ME = "participatedByMe"
 
     val allColunns = arrayOf(
-        ID,
-        CONTENT,
-        PIBLISHED,
-        AUTHOR,
-        LIKED_BY_ME,
-        LINK,
-        STATUS,
-        TIME_STATUS,
-        PARTICIPATED_BY_ME
+        ID, CONTENT, PIBLISHED, AUTHOR, LIKED_BY_ME, LINK, STATUS, TIME_STATUS, PARTICIPATED_BY_ME
     )
 }
 
- //       val allColunns = arrayOf(TABLE_NAME,ID,CONTENT,PIBLISHED,AUTHOR,LIKED_BY_ME,LINK,STATUS,TIME_STATUS,PARTICIPATED_BY_ME)
+//       val allColunns = arrayOf(TABLE_NAME,ID,CONTENT,PIBLISHED,AUTHOR,LIKED_BY_ME,LINK,STATUS,TIME_STATUS,PARTICIPATED_BY_ME)
 //}
 

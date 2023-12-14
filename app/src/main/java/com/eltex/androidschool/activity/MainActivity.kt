@@ -16,7 +16,6 @@ import com.eltex.androidschool.adapter.OffsetDecoration
 import com.eltex.androidschool.databinding.ActivityMainBinding
 import com.eltex.androidschool.db.AppDb
 import com.eltex.androidschool.model.Event
-import com.eltex.androidschool.repository.LocalEventsRepository
 import com.eltex.androidschool.repository.SqliteEventRepository
 import com.eltex.androidschool.utils.toast
 import com.eltex.androidschool.viewmodel.EventViewModel
@@ -35,8 +34,9 @@ class MainActivity : AppCompatActivity() {
         val viewModel by viewModels<EventViewModel> {
             viewModelFactory {
                 initializer {
-                    EventViewModel(SqliteEventRepository(
-                        AppDb.getInstance(applicationContext).postsDao
+                    EventViewModel(
+                        SqliteEventRepository(
+                            AppDb.getInstance(applicationContext).postsDao
                         )
                     )
                 }

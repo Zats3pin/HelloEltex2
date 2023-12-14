@@ -9,7 +9,7 @@ class AppDb private constructor(db: SQLiteDatabase) {
     val postsDao = PostsDaoImpl(db)
 
     @InternalCoroutinesApi
-    companion object{
+    companion object {
         @Volatile
         private var INSTANCE: AppDb? = null
         fun getInstance(context: Context): AppDb {
@@ -19,14 +19,14 @@ class AppDb private constructor(db: SQLiteDatabase) {
 
             val applicationContext = context.applicationContext
 
-            synchronized(this){
+            synchronized(this) {
                 INSTANCE?.let { return it }
 
                 val appDb = AppDb(
                     DbHelper(applicationContext).writableDatabase
                 )
 
-                INSTANCE= appDb
+                INSTANCE = appDb
 
                 return appDb
             }

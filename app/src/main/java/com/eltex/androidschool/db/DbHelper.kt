@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.eltex.androidschool.dao.PostTable
 
-class DbHelper(contex:Context) : SQLiteOpenHelper(contex, "app_db", null, 1 ) {
+class DbHelper(contex: Context) : SQLiteOpenHelper(contex, "app_db", null, 1) {
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             """
