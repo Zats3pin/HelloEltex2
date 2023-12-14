@@ -73,6 +73,16 @@ class PostsDaoImpl(private val db: SQLiteDatabase) : PostDao {
         )
         return getPostById(eventId)
     }
+    override fun ParticipatedById(eventId: Long): Event {
+        db.execSQL("""
+            UPDATE ${PostTable.TABLE_NAME} SET 
+            ${PostTable.PARTICIPATED_BY_ME} = CASE WHEN 
+            ${PostTable.PARTICIPATED_BY_ME} = 1 THEN 0 ELSE 1 
+            END WHERE ${PostTable.ID} = ? 
+        """.trimIndent(), arrayOf(eventId.toString())
+        )
+        return getPostById(eventId)
+    }
 
     override fun deleteById(eventId: Long) {
         db.delete(PostTable.TABLE_NAME,"${PostTable.ID} = ?", arrayOf(eventId.toString()))

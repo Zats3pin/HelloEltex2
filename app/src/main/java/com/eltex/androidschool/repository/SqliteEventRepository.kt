@@ -30,16 +30,8 @@ class SqliteEventRepository (private val dao: PostDao) : EventRepository {
     }
 
     override fun participatedById(id: Long) {
-        state.update { events ->
-            events.map {
-                if (id == it.id) {
-                    it.copy(participatedByMe = !it.participatedByMe)
-                } else {
-                    it
-                }
-            }
-        }
-       // sync()
+        dao.ParticipatedById(id)
+        state.update{readEvents()}
     }
 
     override fun addPost(content: String) {

@@ -7,4 +7,5 @@ interface PostDao {
     fun save(event : Event): Event
     fun likeById(eventId: Long): Event
     fun deleteById(eventId: Long)
+    fun ParticipatedById(eventId: Long): Event
 }
