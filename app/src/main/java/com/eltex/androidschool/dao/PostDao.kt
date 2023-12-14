@@ -8,4 +8,5 @@ interface PostDao {
     fun likeById(eventId: Long): Event
     fun deleteById(eventId: Long)
     fun ParticipatedById(eventId: Long): Event
+    fun editById(id: Long?, content: String?): Event
 }

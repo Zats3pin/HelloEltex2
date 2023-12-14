@@ -35,7 +35,13 @@ class SqliteEventRepository (private val dao: PostDao) : EventRepository {
     }
 
     override fun addPost(content: String) {
-        dao.save(Event(content = content, author = "ME"))
+        dao.save(Event(
+            content = content,
+            author = "ME",
+            published = "NOW",
+            link = "https://github.com/Zats3pin/HelloEltex2",
+            status = "offline",
+            timeStatus = "11.12.1997"))
         state.update{readEvents()}
     }
 
@@ -45,16 +51,8 @@ class SqliteEventRepository (private val dao: PostDao) : EventRepository {
     }
 
     override fun editById(id: Long?, content: String?) {
-        state.update { events ->
-            events.map { event ->
-                if (event.id == id) {
-                    event.copy(content = content.toString())
-                } else {
-                    event
-                }
-            }
-        }
-        //sync()
+        dao.editById(id,content)
+        state.update{readEvents()}
 
     }
 

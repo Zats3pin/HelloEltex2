@@ -4,7 +4,6 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import androidx.core.content.contentValuesOf
 import com.eltex.androidschool.model.Event
-import kotlinx.serialization.SerialName
 
 class PostsDaoImpl(private val db: SQLiteDatabase) : PostDao {
     override fun getAll(): List<Event> =
@@ -46,7 +45,7 @@ class PostsDaoImpl(private val db: SQLiteDatabase) : PostDao {
         return  getPostById(id)
     }
 
-        private fun getPostById(id:Long): Event =
+        private fun getPostById(id: Long?): Event =
         db.query(
             PostTable.TABLE_NAME,
             PostTable.allColunns,
@@ -82,6 +81,16 @@ class PostsDaoImpl(private val db: SQLiteDatabase) : PostDao {
         """.trimIndent(), arrayOf(eventId.toString())
         )
         return getPostById(eventId)
+    }
+
+    override fun editById(id: Long?, content: String?): Event {
+        db.execSQL("""
+        UPDATE ${PostTable.TABLE_NAME} 
+        SET ${PostTable.CONTENT} = ?
+        WHERE ${PostTable.ID} = ? 
+    """.trimIndent(), arrayOf(content,id.toString())
+        )
+        return getPostById(id)
     }
 
     override fun deleteById(eventId: Long) {
