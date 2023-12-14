@@ -14,14 +14,18 @@ import com.eltex.androidschool.R
 import com.eltex.androidschool.adapter.EventsAdapter
 import com.eltex.androidschool.adapter.OffsetDecoration
 import com.eltex.androidschool.databinding.ActivityMainBinding
+import com.eltex.androidschool.db.AppDb
 import com.eltex.androidschool.model.Event
 import com.eltex.androidschool.repository.LocalEventsRepository
+import com.eltex.androidschool.repository.SqliteEventRepository
 import com.eltex.androidschool.utils.toast
 import com.eltex.androidschool.viewmodel.EventViewModel
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 
+@OptIn(InternalCoroutinesApi::class)
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +35,10 @@ class MainActivity : AppCompatActivity() {
         val viewModel by viewModels<EventViewModel> {
             viewModelFactory {
                 initializer {
-                    EventViewModel(LocalEventsRepository(applicationContext))
+                    EventViewModel(SqliteEventRepository(
+                        AppDb.getInstance(applicationContext).postsDao
+                        )
+                    )
                 }
             }
         }

@@ -1,0 +1,69 @@
+package com.eltex.androidschool.repository
+
+import android.content.Context
+import androidx.core.content.edit
+import com.eltex.androidschool.dao.PostDao
+import com.eltex.androidschool.model.Event
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+
+class SqliteEventRepository (private val dao: PostDao) : EventRepository {
+
+
+
+   // private val preferences = context.getSharedPreferences("events", Context.MODE_PRIVATE)
+    private val state = MutableStateFlow(readEvents())
+
+
+    private fun readEvents(): List<Event> = dao.getAll()
+
+
+    override fun getPost(): Flow<List<Event>> = state.asStateFlow()
+
+    override fun likeById(id: Long) {
+     dao.likeById(id)
+        state.update{readEvents()}
+    }
+
+    override fun participatedById(id: Long) {
+        state.update { events ->
+            events.map {
+                if (id == it.id) {
+                    it.copy(participatedByMe = !it.participatedByMe)
+                } else {
+                    it
+                }
+            }
+        }
+       // sync()
+    }
+
+    override fun addPost(content: String) {
+        dao.save(Event(content = content, author = "ME"))
+        state.update{readEvents()}
+    }
+
+    override fun deleteById(id: Long) {
+        dao.deleteById(id)
+        state.update{readEvents()}
+    }
+
+    override fun editById(id: Long?, content: String?) {
+        state.update { events ->
+            events.map { event ->
+                if (event.id == id) {
+                    event.copy(content = content.toString())
+                } else {
+                    event
+                }
+            }
+        }
+        //sync()
+
+    }
+
+}
