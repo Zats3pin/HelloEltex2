@@ -28,9 +28,9 @@ interface PostDao {
     """)
     fun ParticipatedById(eventId: Long)
 
-   // @Query("""
-   //     UPDATE Posts SET content = content
-   //     WHERE id = :eventId
-   //     """)
-    fun editById(id: Long?, content: String?) //Event//id?
+    @Query("""
+        UPDATE Posts SET content = :content
+        WHERE id = :id
+        """)
+    fun editById(id: Long?, content: String?)
 }
