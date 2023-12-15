@@ -2,36 +2,33 @@ package com.eltex.androidschool.repository
 
 
 import com.eltex.androidschool.dao.PostDao
+import com.eltex.androidschool.entity.PostEntity
 import com.eltex.androidschool.model.Event
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 
 
 class SqliteEventRepository(private val dao: PostDao) : EventRepository {
 
+    override fun getPost(): Flow<List<Event>> = dao.getAll()
+        .map {
 
-    private val state = MutableStateFlow(readEvents())
-
-
-    private fun readEvents(): List<Event> = dao.getAll()
-
-
-    override fun getPost(): Flow<List<Event>> = state.asStateFlow()
+            it.map(PostEntity::toEvent)
+        }
 
     override fun likeById(id: Long) {
         dao.likeById(id)
-        state.update { readEvents() }
     }
 
     override fun participatedById(id: Long) {
         dao.ParticipatedById(id)
-        state.update { readEvents() }
     }
 
     override fun addPost(content: String) {
-        dao.save(
+        dao.save(PostEntity.fromPost(
             Event(
                 content = content,
                 author = "ME",
@@ -41,18 +38,15 @@ class SqliteEventRepository(private val dao: PostDao) : EventRepository {
                 timeStatus = "11.12.1997"
             )
         )
-        state.update { readEvents() }
+        )
     }
 
     override fun deleteById(id: Long) {
         dao.deleteById(id)
-        state.update { readEvents() }
     }
 
     override fun editById(id: Long?, content: String?) {
         dao.editById(id, content)
-        state.update { readEvents() }
-
     }
 
 }

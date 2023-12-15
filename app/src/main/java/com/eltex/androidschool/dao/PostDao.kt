@@ -1,12 +1,36 @@
 package com.eltex.androidschool.dao
-
-import com.eltex.androidschool.model.Event
-
+import androidx.room.Dao
+import androidx.room.Query
+import androidx.room.Upsert
+import com.eltex.androidschool.entity.PostEntity
+import kotlinx.coroutines.flow.Flow
+@Dao
 interface PostDao {
-    fun getAll(): List<Event>
-    fun save(event: Event): Event
-    fun likeById(eventId: Long): Event
+
+    @Query("SELECT * FROM Posts ORDER BY id DESC")
+    fun getAll(): Flow<List<PostEntity>>
+    @Upsert
+    fun save(event: PostEntity): Long
+    @Query("""
+        UPDATE Posts SET
+        likedByMe = CASE WHEN likedByMe = 1 THEN 0 ELSE 1 END
+        WHERE id = :eventId
+    """)
+
+    fun likeById(eventId: Long)
+
+    @Query("DELETE FROM Posts WHERE id = :eventId" )
     fun deleteById(eventId: Long)
-    fun ParticipatedById(eventId: Long): Event
-    fun editById(id: Long?, content: String?): Event
+    @Query("""
+        UPDATE Posts SET
+        participatedByMe = CASE WHEN participatedByMe = 1 THEN 0 ELSE 1 END
+        WHERE id = :eventId
+    """)
+    fun ParticipatedById(eventId: Long)
+
+   // @Query("""
+   //     UPDATE Posts SET content = content
+   //     WHERE id = :eventId
+   //     """)
+    fun editById(id: Long?, content: String?) //Event//id?
 }
