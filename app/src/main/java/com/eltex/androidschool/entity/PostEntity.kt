@@ -12,12 +12,12 @@ data class PostEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     val id: Long = 0L,
-    @ColumnInfo(name = "content")
+    @ColumnInfo(name = "content")//
     val content: String = "",
-    @ColumnInfo(name = "author")
-    val author: String = "",
     @ColumnInfo(name = "published")
     val published: String = "",
+    @ColumnInfo(name = "author")
+    val author: String = "",
     @ColumnInfo(name = "likedByMe")
     val likedByMe: Boolean = false,
     @ColumnInfo(name = "link")
@@ -52,7 +52,8 @@ data class PostEntity(
                 likedByMe = likedByMe,
                 link = link,
                 status = status,
-                timeStatus = timeStatus
+                timeStatus = timeStatus,
+                participatedByMe = participatedByMe
             )
         }
     }

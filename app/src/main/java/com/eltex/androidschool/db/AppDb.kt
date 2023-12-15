@@ -12,6 +12,7 @@ import com.eltex.androidschool.entity.PostEntity
 @Database(
     entities = [PostEntity::class],
     version = 1,
+    exportSchema = false
 )
 abstract class AppDb:RoomDatabase() {
     abstract val postsDao: PostDao
