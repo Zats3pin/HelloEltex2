@@ -26,7 +26,7 @@ interface PostDao {
         participatedByMe = CASE WHEN participatedByMe = 1 THEN 0 ELSE 1 END
         WHERE id = :eventId
     """)
-    fun ParticipatedById(eventId: Long)
+    fun participatedById(eventId: Long)
 
     @Query("""
         UPDATE Posts SET content = :content

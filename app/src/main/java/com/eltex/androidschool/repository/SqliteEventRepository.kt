@@ -5,16 +5,13 @@ import com.eltex.androidschool.dao.PostDao
 import com.eltex.androidschool.entity.PostEntity
 import com.eltex.androidschool.model.Event
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
+
 
 
 class SqliteEventRepository(private val dao: PostDao) : EventRepository {
 
-    override fun getPost(): Flow<List<Event>> = dao.getAll()
-        .map {
+    override fun getPost(): Flow<List<Event>> = dao.getAll().map {
 
             it.map(PostEntity::toEvent)
         }
@@ -24,20 +21,21 @@ class SqliteEventRepository(private val dao: PostDao) : EventRepository {
     }
 
     override fun participatedById(id: Long) {
-        dao.ParticipatedById(id)
+        dao.participatedById(id)
     }
 
     override fun addPost(content: String) {
-        dao.save(PostEntity.fromPost(
-            Event(
-                content = content,
-                author = "ME",
-                published = "NOW",
-                link = "https://github.com/Zats3pin/HelloEltex2",
-                status = "offline",
-                timeStatus = "11.12.1997"
+        dao.save(
+            PostEntity.fromPost(
+                Event(
+                    content = content,
+                    author = "ME",
+                    published = "NOW",
+                    link = "https://github.com/Zats3pin/HelloEltex2",
+                    status = "offline",
+                    timeStatus = "11.12.1997"
+                )
             )
-        )
         )
     }
 

@@ -28,9 +28,9 @@ data class PostEntity(
     val timeStatus: String = "",
     @ColumnInfo(name = "participatedByMe")
     val participatedByMe: Boolean = false,
-){
+) {
 
-    fun toEvent() : Event = Event(
+    fun toEvent(): Event = Event(
         id = id,
         content = content,
         author = author,
@@ -42,8 +42,8 @@ data class PostEntity(
         participatedByMe = participatedByMe
     )
 
-    companion object{
-        fun fromPost(event: Event): PostEntity = with(event){
+    companion object {
+        fun fromPost(event: Event): PostEntity = with(event) {
             PostEntity(
                 id = id,
                 content = content,
