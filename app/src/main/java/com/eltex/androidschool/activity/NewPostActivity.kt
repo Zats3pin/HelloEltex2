@@ -27,7 +27,7 @@ class NewPostActivity : AppCompatActivity() {
 
 
 
-        binding.toolbar.setOnMenuItemClickListener {
+            /**  binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.save -> {
                     val content = binding.content.text?.toString().orEmpty()
@@ -52,7 +52,7 @@ class NewPostActivity : AppCompatActivity() {
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
-        }
+        } */
 
     }
 }

@@ -6,19 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".activity.NewPostActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        style="@style/Widget.Material3.Toolbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/new_post_menu"
-        app:navigationIcon="?homeAsUpIndicator"
-        app:title="@string/new_post_title" />
-
-
     <EditText
         android:id="@+id/content"
         android:layout_width="0dp"
