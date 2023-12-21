@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/fragmentPosts"
+        android:id="@+id/postsFragment"
         android:icon="@drawable/rss_feed"
         android:title="@string/posts_description" />
     <item
-        android:id="@+id/fragmentEvents"
+        android:id="@+id/eventsFragment"
         android:icon="@drawable/events"
         android:title="@string/event_description" />
     <item
-        android:id="@+id/fragmentUsers"
+        android:id="@+id/usersFragment"
         android:icon="@drawable/iconpeople"
         android:title="@string/users_description" />
 </menu>
