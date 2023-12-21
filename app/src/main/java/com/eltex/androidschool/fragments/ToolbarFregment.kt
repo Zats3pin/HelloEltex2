@@ -5,7 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import com.eltex.androidschool.R
 import com.eltex.androidschool.databinding.FragmentToolbarBinding
+import com.eltex.androidschool.viewmodel.ToolbarViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class ToolbarFragment : Fragment() {
     override fun onCreateView(
@@ -14,6 +20,21 @@ class ToolbarFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentToolbarBinding.inflate(inflater,container,false)
+
+        val viewModel by activityViewModels<ToolbarViewModel>()
+
+        val item = binding.toolbar.menu.findItem(R.id.save)
+
+        viewModel.showSave.onEach {
+            item.isVisible = it
+        }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+
+        item.setOnMenuItemClickListener {
+            viewModel.saveClicked(true)
+            true
+        }
+
 
         return binding.root
     }

@@ -143,10 +143,10 @@ class EventsFragment : Fragment() {
 
         binding.list.addItemDecoration(OffsetDecoration(resources.getDimensionPixelSize(R.dimen.small_spacing)))
 
-        viewModel.state.flowWithLifecycle(lifecycle).onEach {
+        viewModel.state.flowWithLifecycle(viewLifecycleOwner.lifecycle).onEach {
             adapter.submitList(it.events)
         }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
 
         return binding.root
