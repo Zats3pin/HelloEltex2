@@ -7,16 +7,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.navigation.fragment.findNavController
 import com.eltex.androidschool.R
 
 import com.eltex.androidschool.databinding.FragmentNewPostBinding
+import com.eltex.androidschool.db.AppDb
+import com.eltex.androidschool.repository.SqliteEventRepository
+import com.eltex.androidschool.viewmodel.EventViewModel
+import com.eltex.androidschool.viewmodel.NewEventViewModel
 import com.eltex.androidschool.viewmodel.ToolbarViewModel
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.onEach
 
 class NewPostFragment : Fragment() {
 
-
+companion object{
+    const val ARG_ID = "ARG_ID"
+}
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -25,16 +35,28 @@ class NewPostFragment : Fragment() {
         super.onCreate(savedInstanceState)
         val binding = FragmentNewPostBinding.inflate(inflater,container,false)
 
-        //val intentEventData = intent.getLongExtra("event_id", -1)
-       // if (intentEventData != -1L) {
-       //     eventId = intentEventData
-       //     eventContent = intent.getStringExtra("event_content") ?: ""
-       //     binding.content.setText(eventContent)
-      //  } else {
-       //     eventId = -1
-      //  }
-
+        val id = arguments?.getLong(ARG_ID) ?: 0L
         val toolbarViewModel by activityViewModels<ToolbarViewModel>()
+
+        val viewModel by viewModels<NewEventViewModel>{
+            viewModelFactory {
+            initializer {
+                NewEventViewModel(
+                    repository = SqliteEventRepository(
+                        AppDb.getInstance(requireContext().applicationContext
+                        ).postsDao
+                    ),
+                    id = id,
+                )
+            }
+        }
+        }
+
+
+
+
+
+
 
         toolbarViewModel.saveClicked
             .filter {it}
@@ -42,16 +64,14 @@ class NewPostFragment : Fragment() {
                     val content = binding.content.text?.toString().orEmpty()
 
                     if (content.isNotBlank()) {
-/**   setResult(
-                            RESULT_OK,
-                            Intent().putExtra(Intent.EXTRA_TEXT, content)
-                                .putExtra("event_id", eventId)
-                        )
-                        finish()*/
+                        viewModel.save(content)
+                        findNavController().navigateUp()
                     } else {
-                        //   не работает
+                        //   не работает!!!!!!!!!!!!!!!!!!!!!toast
                     // toast(R.string.post_empty_error, false)
                     }
+
+                    toolbarViewModel.saveClicked(false)
                 }
 
 

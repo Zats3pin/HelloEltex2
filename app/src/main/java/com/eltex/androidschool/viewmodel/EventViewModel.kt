@@ -32,8 +32,8 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
 
     }
 
-    fun addPost(content: String) {
-        repository.addPost(content)
+    fun addPost(id:Long, content: String) {
+        repository.addPost(id,content)
     }
 
     fun deleteById(id: Long){

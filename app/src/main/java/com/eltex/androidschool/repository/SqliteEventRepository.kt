@@ -24,19 +24,23 @@ class SqliteEventRepository(private val dao: PostDao) : EventRepository {
         dao.participatedById(id)
     }
 
-    override fun addPost(content: String) {
-        dao.save(
-            PostEntity.fromPost(
-                Event(
-                    content = content,
-                    author = "ME",
-                    published = "NOW",
-                    link = "https://github.com/Zats3pin/HelloEltex2",
-                    status = "offline",
-                    timeStatus = "11.12.1997"
+    override fun addPost(id: Long, content: String) {
+
+
+            dao.save(
+                PostEntity.fromPost(
+                    Event(
+                        id = id,
+                        content = content,
+                        author = "ME",
+                        published = "NOW",
+                        link = "https://github.com/Zats3pin/HelloEltex2",
+                        status = "offline",
+                        timeStatus = "11.12.1997"
+                    )
                 )
             )
-        )
+
     }
 
     override fun deleteById(id: Long) {
