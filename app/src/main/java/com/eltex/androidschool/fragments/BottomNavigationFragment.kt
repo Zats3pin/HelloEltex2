@@ -42,19 +42,19 @@ class BottomNavigationFragment : Fragment() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
         when(destination.id){
             R.id.eventsFragment ->{
-                binding.newPost.setOnClickListener { newEventListener }
+                binding.newPost.setOnClickListener ( newEventListener )
                 binding.newPost.animate()
                     .scaleX(1F)
                     .scaleY(1F)
             }
             R.id.postsFragment ->{
-                binding.newPost.setOnClickListener {newPostListener}
+                binding.newPost.setOnClickListener (newPostListener)
                 binding.newPost.animate()
                     .scaleX(1F)
                     .scaleY(1F)
             }
             R.id.usersFragment ->{
-                binding.newPost.setOnClickListener {null}
+                binding.newPost.setOnClickListener (null)
                 binding.newPost.animate()
                     .scaleX(0F)
                     .scaleY(0F)

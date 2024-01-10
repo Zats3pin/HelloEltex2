@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
@@ -20,6 +21,7 @@ import com.eltex.androidschool.viewmodel.EventViewModel
 import com.eltex.androidschool.viewmodel.NewEventViewModel
 import com.eltex.androidschool.viewmodel.ToolbarViewModel
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class NewPostFragment : Fragment() {
@@ -27,6 +29,19 @@ class NewPostFragment : Fragment() {
 companion object{
     const val ARG_ID = "ARG_ID"
 }
+
+    private val toolbarViewModel by activityViewModels<ToolbarViewModel>()
+
+    override fun onStart() {
+        super.onStart()
+        toolbarViewModel.showSave(true)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        toolbarViewModel.showSave(false)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -67,16 +82,12 @@ companion object{
                         viewModel.save(content)
                         findNavController().navigateUp()
                     } else {
-                        //   не работает!!!!!!!!!!!!!!!!!!!!!toast
-                    // toast(R.string.post_empty_error, false)
+                     toast(R.string.post_empty_error, false)
                     }
 
                     toolbarViewModel.saveClicked(false)
                 }
-
-
-
-
+            .launchIn(viewLifecycleOwner.lifecycleScope) // Не забудьте добавить
 
 
        return binding.root
@@ -87,63 +98,11 @@ companion object{
     private var eventId: Long = -1
     private var eventContent: String = ""
 
-/** override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val binding = ActivityNewPostBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        val intentEventData = intent.getLongExtra("event_id", -1)
-        if (intentEventData != -1L) {
-            eventId = intentEventData
-            eventContent = intent.getStringExtra("event_content") ?: ""
-            binding.content.setText(eventContent)
-        } else {
-            eventId = -1
-        }
- */
+
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     val binding = FragmentNewPostBinding.inflate(layoutInflater) // переименовать под event
 
-
-
-
-   /**
-    val intentEventData = intent.getLongExtra("event_id", -1)
-    if (intentEventData != -1L) {
-        eventId = intentEventData
-        eventContent = intent.getStringExtra("event_content") ?: ""
-        binding.content.setText(eventContent)
-    } else {
-        eventId = -1
-    }
-    */
-
-            /**  binding.toolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.save -> {
-                    val content = binding.content.text?.toString().orEmpty()
-
-                    if (content.isNotBlank()) {
-                        setResult(
-                            RESULT_OK,
-                            Intent().putExtra(Intent.EXTRA_TEXT, content)
-                                .putExtra("event_id", eventId)
-                        )
-                        finish()
-                    } else {
-                        toast(R.string.post_empty_error, false)
-                    }
-
-                    true
-                }
-
-                else -> false
-            }
-        }
-
-        binding.toolbar.setNavigationOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        } */
 
     }
 }
