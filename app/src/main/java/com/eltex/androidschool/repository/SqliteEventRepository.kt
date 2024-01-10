@@ -8,13 +8,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 
-
 class SqliteEventRepository(private val dao: PostDao) : EventRepository {
 
     override fun getPost(): Flow<List<Event>> = dao.getAll().map {
 
-            it.map(PostEntity::toEvent)
-        }
+        it.map(PostEntity::toEvent)
+    }
 
     override fun likeById(id: Long) {
         dao.likeById(id)
@@ -27,19 +26,19 @@ class SqliteEventRepository(private val dao: PostDao) : EventRepository {
     override fun addPost(id: Long, content: String) {
 
 
-            dao.save(
-                PostEntity.fromPost(
-                    Event(
-                        id = id,
-                        content = content,
-                        author = "ME",
-                        published = "NOW",
-                        link = "https://github.com/Zats3pin/HelloEltex2",
-                        status = "offline",
-                        timeStatus = "11.12.1997"
-                    )
+        dao.save(
+            PostEntity.fromPost(
+                Event(
+                    id = id,
+                    content = content,
+                    author = "ME",
+                    published = "NOW",
+                    link = "https://github.com/Zats3pin/HelloEltex2",
+                    status = "offline",
+                    timeStatus = "11.12.1997"
                 )
             )
+        )
 
     }
 

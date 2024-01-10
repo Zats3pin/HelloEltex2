@@ -18,4 +18,10 @@
     <string name="post_empty_error">Содержимое не должно быть пустым</string>
     <string name="me">я</string>
     <string name="delete_post">удалить пост</string>
+    <string name="edit_post">редактировать пост</string>
+    <string name="edit_post_title">заголовок редактировать пост</string>
+    <string name="hello_blank_fragment">Привет, пустой фрагмент</string>
+    <string name="posts_description">пост</string>
+    <string name="event_description">событие</string>
+    <string name="users_description">пользователь</string>
 </resources>

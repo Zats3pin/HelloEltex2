@@ -17,10 +17,10 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
 
     init {
         repository.getPost().onEach { post ->
-                _state.update {
-                    it.copy(events = post)
-                }
-            }.launchIn(viewModelScope)
+            _state.update {
+                it.copy(events = post)
+            }
+        }.launchIn(viewModelScope)
     }
 
     fun likeById(id: Long) {
@@ -32,17 +32,9 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
 
     }
 
-    fun addPost(id:Long, content: String) {
-        repository.addPost(id,content)
-    }
 
-    fun deleteById(id: Long){
+    fun deleteById(id: Long) {
         repository.deleteById(id)
     }
-
-
-    fun editById(id: Long?, content: String?) {
-        repository.editById(id, content)
-        }
 
 }

@@ -78,7 +78,7 @@ class EventsFragment : Fragment() {
 
 
             override fun onMenuClickListener(event: Event) {
-                  toast(R.string.not_implemented, false)
+                toast(R.string.not_implemented, false)
             }
 
 

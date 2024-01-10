@@ -10,12 +10,4 @@ class NewEventViewModel(
     fun save(content:String){
         repository.addPost(id,content)
     }
-
-
-    fun edit(id: Long, content: String) {
-        repository.editById(id, content)
-        }
-
-
-
 }

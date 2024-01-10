@@ -25,12 +25,13 @@ class ToolbarFragment : Fragment() {
             .setPrimaryNavigationFragment(this)
             .commit()
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentToolbarBinding.inflate(inflater,container,false)
+        val binding = FragmentToolbarBinding.inflate(inflater, container, false)
 
         // Связываем навигацию с toolbar
         val navController =
