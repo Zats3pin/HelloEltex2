@@ -1,3 +1,4 @@
+import java.util.Properties
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -21,6 +22,15 @@ android {
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
         }
+
+       val secretProps =  rootDir.resolve("secrets.properties")
+            .bufferedReader()
+            .use{
+                Properties().apply{
+                    load(it)
+                }
+            }
+        buildConfigField("String", "API_KEY", secretProps.getProperty("API_KEY"))
     }
 
     buildTypes {
@@ -42,6 +52,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 
 }
