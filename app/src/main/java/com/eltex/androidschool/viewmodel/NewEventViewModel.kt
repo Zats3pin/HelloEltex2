@@ -12,6 +12,10 @@ class NewEventViewModel(
     }
 
 
+    fun edit(id: Long, content: String) {
+        repository.editById(id, content)
+        }
+
 
 
 }

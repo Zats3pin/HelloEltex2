@@ -28,6 +28,8 @@ class NewPostFragment : Fragment() {
 
 companion object{
     const val ARG_ID = "ARG_ID"
+    const val ARG_CONTENT = "ARG_CONTENT"
+
 }
 
     private val toolbarViewModel by activityViewModels<ToolbarViewModel>()
