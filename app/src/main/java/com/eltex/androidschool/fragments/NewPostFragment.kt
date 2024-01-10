@@ -14,9 +14,15 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
 import com.eltex.androidschool.R
 
+
+import androidx.core.os.bundleOf
+import com.eltex.androidschool.model.Status
+import com.eltex.androidschool.repository.NetworkEventRepository
+import com.eltex.androidschool.utils.getText
+
+
+
 import com.eltex.androidschool.databinding.FragmentNewPostBinding
-import com.eltex.androidschool.db.AppDb
-import com.eltex.androidschool.repository.SqliteEventRepository
 import com.eltex.androidschool.viewmodel.NewEventViewModel
 import com.eltex.androidschool.viewmodel.ToolbarViewModel
 import kotlinx.coroutines.flow.filter
@@ -26,7 +32,8 @@ import kotlinx.coroutines.flow.onEach
 class NewPostFragment : Fragment() {
 
     companion object {
-        const val ARG_ID = "ARG_ID"
+        const val ARG_EVENT_ID = "ARG_EVENT_ID"
+        const val POST_CREATED_RESULT = "POST_CREATED_RESULT"
         const val ARG_CONTENT = "ARG_CONTENT"
 
     }
@@ -51,56 +58,65 @@ class NewPostFragment : Fragment() {
         super.onCreate(savedInstanceState)
         val binding = FragmentNewPostBinding.inflate(inflater, container, false)
 
-        val id = arguments?.getLong(ARG_ID) ?: 0L
+        val id = arguments?.getLong(ARG_EVENT_ID) ?: 0L
 
         val editContent = arguments?.getString(ARG_CONTENT)
         if (editContent?.isNotBlank() == true) {
             binding.content.setText(editContent)
         }
 
-        val toolbarViewModel by activityViewModels<ToolbarViewModel>()
+
 
         val viewModel by viewModels<NewEventViewModel> {
             viewModelFactory {
                 initializer {
                     NewEventViewModel(
-                        repository = SqliteEventRepository(
-                            AppDb.getInstance(
-                                requireContext().applicationContext
-                            ).postsDao
-                        ),
-                        id = id,
+                        repository = NetworkEventRepository(),
+                        eventId = id
                     )
                 }
             }
         }
 
 
-
-
-
-
-
-        toolbarViewModel.saveClicked
-            .filter {
-                it
+        viewModel.state.onEach { state ->
+            (state.status as? Status.Error)?.let {
+                requireContext()
+                    .applicationContext
+                    .toast(it.reason.getText(requireContext()), true)
+                viewModel.consumeError()
             }
+            state.result?.let {
+                requireActivity().supportFragmentManager.setFragmentResult(
+                    POST_CREATED_RESULT,
+                    bundleOf()
+                )
+                findNavController().navigateUp()
+            }
+        }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+        val toolbarViewModel by activityViewModels<ToolbarViewModel>()
+        toolbarViewModel.saveClicked
+            .filter { it }
             .onEach {
                 val content = binding.content.text?.toString().orEmpty()
-
-                if (content.isNotBlank()) {
-                    viewModel.save(content)
-                    findNavController().navigateUp()
+                if (content.isBlank()) {
+                    requireContext()
+                        .applicationContext
+                        .toast(R.string.post_empty_error.toString(), true)
                 } else {
-                    toast(R.string.post_empty_error, false)
+                    viewModel.save(content)
                 }
-
                 toolbarViewModel.saveClicked(false)
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
-
-
         return binding.root
+    }
+    private var eventId: Long = -1
+    private var eventContent: String = ""
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
 
     }
 

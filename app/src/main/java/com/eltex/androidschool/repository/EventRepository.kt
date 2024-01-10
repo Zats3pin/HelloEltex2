@@ -1,15 +1,18 @@
 package com.eltex.androidschool.repository
 
 import com.eltex.androidschool.model.Event
-import kotlinx.coroutines.flow.Flow
+import com.eltex.androidschool.utils.Callback
+
 
 interface EventRepository {
-    fun getPost(): Flow<List<Event>>
-    fun likeById(id: Long)
-    fun participatedById(id: Long)
-    fun addPost(id: Long, content: String)
+    fun participate(id: Long, callback: Callback<Event>)
+    fun menu()
+    fun share()
+    fun editById(id: Long?, content: String?, callback: Callback<Event>)
+    //
+    fun getEvents(callback: Callback<List<Event>>)
+    fun likeById(id: Long, callback: Callback<Event>)
+    fun saveEvent(id: Long, content: String, callback: Callback<Event>)
+    fun deleteById(id: Long, callback: Callback<Unit>)
 
-    fun deleteById(id: Long)
-
-    fun editById(id: Long?, content: String?)
 }

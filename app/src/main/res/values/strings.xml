@@ -24,4 +24,7 @@
     <string name="posts_description">Posts</string>
     <string name="event_description">Events</string>
     <string name="users_description">Users</string>
+    <string name="network_error">network error</string>
+    <string name="unknown_error">unknown error</string>
+    <string name="retry">retry</string>
 </resources>

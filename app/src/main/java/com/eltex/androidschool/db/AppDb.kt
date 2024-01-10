@@ -6,8 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.eltex.androidschool.dao.PostDao
-import com.eltex.androidschool.entity.PostEntity
 
 
 @Database(

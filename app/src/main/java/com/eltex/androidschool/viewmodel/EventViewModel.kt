@@ -6,9 +6,12 @@ import com.eltex.androidschool.repository.EventRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+
+import com.eltex.androidschool.model.Event
+import com.eltex.androidschool.model.Status
+import com.eltex.androidschool.utils.Callback
+
 
 class EventViewModel(private val repository: EventRepository) : ViewModel() {
 
@@ -16,25 +19,125 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
     val state: StateFlow<EventUiState> = _state.asStateFlow()
 
     init {
-        repository.getPost().onEach { post ->
-            _state.update {
-                it.copy(events = post)
+        load()
+    }
+
+    fun load(){
+        _state.update { it.copy(status = Status.Loading) }
+        repository.getEvents(
+            object : Callback<List<Event>> {
+                override fun onSuccess(data: List<Event>) {
+                    _state.update {
+                        it.copy(events = data, status = Status.Idle)
+                    }
+                }
+                override fun onError(throwable: Throwable) {
+                    _state.update {
+                        it.copy(status = Status.Error(throwable))
+                    }
+                }
             }
-        }.launchIn(viewModelScope)
+        )
     }
 
-    fun likeById(id: Long) {
-        repository.likeById(id)
+    fun consumeError(){
+        _state.update {
+            if (it.status is Status.Error) {
+                it.copy(status = Status.Idle)
+            } else {
+                it
+            }
+        }
     }
 
-    fun participatedById(id: Long) {
-        repository.participatedById(id)
 
+    fun like(post: Event){
+        _state.update { it.copy(status = Status.Loading) }
+        if (!post.likedByMe) {
+            repository.likeById(post.id, object : Callback<Event> {
+                override fun onSuccess(data: Event) {
+                    _state.update { state ->
+                        state.copy(
+                            events = state.events.orEmpty().map {
+                                if (it.id == post.id) {
+                                    data
+                                } else {
+                                    it
+                                }
+                            },
+                            status = Status.Idle,
+                        )
+                    }
+                }
+
+                override fun onError(throwable: Throwable) {
+                    _state.update {
+                        it.copy(status = Status.Error(throwable))
+                    }
+                }
+            })
+        } else {
+            // TODO HW
+        }
+    }
+
+    fun participate(event: Event) {
+        _state.update { it.copy(status = Status.Loading) }
+        if (!event.participatedByMe) {
+            repository.participate(event.id, object : Callback<Event> {
+                override fun onSuccess(data: Event) {
+                    _state.update { state ->
+                        state.copy(
+                            events = state.events.orEmpty().map {
+                                if (it.id == event.id) {
+                                    data
+                                } else {
+                                    it
+                                }
+                            },
+                            status = Status.Idle,
+                        )
+                    }
+                }
+                override fun onError(throwable: Throwable) {
+                    _state.update {
+                        it.copy(status = Status.Error(throwable))
+                    }
+                }
+            })
+        } else {
+            // TODO HW
+        }
     }
 
 
-    fun deleteById(id: Long) {
-        repository.deleteById(id)
+    fun menu(){
+        repository.menu()
     }
+    fun share(){
+        repository.share()
+    }
+    fun deleteById(id: Long){
+        _state.update { it.copy(status = Status.Loading) }
+        repository.deleteById(id, object: Callback<Unit> {
+            override fun onSuccess(data: Unit) {
+                _state.update { state ->
+                    state.copy(
+                        events = state.events.orEmpty().filter { it.id != id },
+                        status = Status.Idle,
+                    )
+                }
+            }
+            override fun onError(throwable: Throwable) {
+                _state.update {
+                    it.copy(status = Status.Error(throwable))
+                }
+            }
+        })
+    }
+    fun editById(id: Long?, content: String?) {
+        // todo
+    }
+
 
 }
