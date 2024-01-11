@@ -22,7 +22,7 @@ class NetworkEventRepository : EventRepository {
         ignoreUnknownKeys = true
     }
     private val client = OkHttpClient.Builder()
-        .connectTimeout(60, TimeUnit.SECONDS)
+        .connectTimeout(30, TimeUnit.SECONDS)
         .addInterceptor {
             it.proceed(
                 it.request()
