@@ -14,15 +14,18 @@ data class Event(
     val author: String = "",
     @SerialName("published")
     val published: String = "",
-    @SerialName("likedByMe")
-    val likedByMe: Boolean = false,
     @SerialName("link")
     val link: String = "",
     @SerialName("status")
     val status: String = "",
     @SerialName("timeStatus")
     val timeStatus: String = "",
+    @SerialName("likedByMe")
+    val likedByMe: Boolean = false,
     @SerialName("participatedByMe")
     val participatedByMe: Boolean = false,
+
+
+
 
     )
