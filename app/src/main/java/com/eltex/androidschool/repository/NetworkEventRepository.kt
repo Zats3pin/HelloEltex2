@@ -114,8 +114,7 @@ class NetworkEventRepository : EventRepository {
                     Event(
                         id = id,
                         content = content,
-                        published = "2023-12-27T19:19:49.940Z"
-                        //datetime = "2023-12-27T19:19:49.940Z"
+                        datetime = "2023-12-27T19:19:49.940Z"
                     )
                 ).toRequestBody(JSON_TYPE)
             )

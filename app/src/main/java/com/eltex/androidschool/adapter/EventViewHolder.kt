@@ -27,7 +27,7 @@ class EventViewHolder(
         binding.initial.text = event.author.take(1)
         binding.link.text = event.link
         binding.status.text = event.status
-        binding.timeStatus.text = event.timeStatus
+        binding.timeStatus.text = event.datetime
         updateLike(event.likedByMe)
         updateParticipated(event.participatedByMe)
     }

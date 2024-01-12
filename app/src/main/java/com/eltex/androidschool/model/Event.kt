@@ -18,8 +18,8 @@ data class Event(
     val link: String = "",
     @SerialName("status")
     val status: String = "",
-    @SerialName("timeStatus")
-    val timeStatus: String = "",
+    @SerialName("datetime")
+    val datetime: String = "",
     @SerialName("likedByMe")
     val likedByMe: Boolean = false,
     @SerialName("participatedByMe")
