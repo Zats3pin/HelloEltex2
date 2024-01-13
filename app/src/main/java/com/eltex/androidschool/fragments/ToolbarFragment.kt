@@ -21,15 +21,11 @@ class ToolbarFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         // Для перехвата системных кнопок назад
-        parentFragmentManager.beginTransaction()
-            .setPrimaryNavigationFragment(this)
-            .commit()
+        parentFragmentManager.beginTransaction().setPrimaryNavigationFragment(this).commit()
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         val binding = FragmentToolbarBinding.inflate(inflater, container, false)
 
@@ -45,15 +41,12 @@ class ToolbarFragment : Fragment() {
 
         viewModel.showSave.onEach {
             item.isVisible = it
-        }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         item.setOnMenuItemClickListener {
             viewModel.saveClicked(true)
             true
         }
-
-
         return binding.root
     }
 }

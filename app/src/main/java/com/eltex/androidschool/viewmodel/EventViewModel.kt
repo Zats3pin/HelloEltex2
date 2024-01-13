@@ -1,13 +1,11 @@
 package com.eltex.androidschool.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.eltex.androidschool.repository.EventRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-
 import com.eltex.androidschool.model.Event
 import com.eltex.androidschool.model.Status
 import com.eltex.androidschool.utils.Callback
@@ -22,25 +20,24 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
         load()
     }
 
-    fun load(){
+    fun load() {
         _state.update { it.copy(status = Status.Loading) }
-        repository.getEvents(
-            object : Callback<List<Event>> {
-                override fun onSuccess(data: List<Event>) {
-                    _state.update {
-                        it.copy(events = data, status = Status.Idle)
-                    }
-                }
-                override fun onError(throwable: Throwable) {
-                    _state.update {
-                        it.copy(status = Status.Error(throwable))
-                    }
+        repository.getEvents(object : Callback<List<Event>> {
+            override fun onSuccess(data: List<Event>) {
+                _state.update {
+                    it.copy(events = data, status = Status.Idle)
                 }
             }
-        )
+
+            override fun onError(throwable: Throwable) {
+                _state.update {
+                    it.copy(status = Status.Error(throwable))
+                }
+            }
+        })
     }
 
-    fun consumeError(){
+    fun consumeError() {
         _state.update {
             if (it.status is Status.Error) {
                 it.copy(status = Status.Idle)
@@ -50,8 +47,7 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
         }
     }
 
-
-    fun like(post: Event){
+    fun like(post: Event) {
         _state.update { it.copy(status = Status.Loading) }
         if (!post.likedByMe) {
             repository.likeById(post.id, object : Callback<Event> {
@@ -99,6 +95,7 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
                         )
                     }
                 }
+
                 override fun onError(throwable: Throwable) {
                     _state.update {
                         it.copy(status = Status.Error(throwable))
@@ -111,15 +108,17 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
     }
 
 
-    fun menu(){
+    fun menu() {
         repository.menu()
     }
-    fun share(){
+
+    fun share() {
         repository.share()
     }
-    fun deleteById(id: Long){
+
+    fun deleteById(id: Long) {
         _state.update { it.copy(status = Status.Loading) }
-        repository.deleteById(id, object: Callback<Unit> {
+        repository.deleteById(id, object : Callback<Unit> {
             override fun onSuccess(data: Unit) {
                 _state.update { state ->
                     state.copy(
@@ -128,6 +127,7 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
                     )
                 }
             }
+
             override fun onError(throwable: Throwable) {
                 _state.update {
                     it.copy(status = Status.Error(throwable))
@@ -135,9 +135,9 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
             }
         })
     }
+
     fun editById(id: Long?, content: String?) {
         // todo
     }
-
 
 }

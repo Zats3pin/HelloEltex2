@@ -20,6 +20,7 @@ class NetworkEventRepository : EventRepository {
     }
     private val json = Json {
         ignoreUnknownKeys = true
+        coerceInputValues = true
     }
     private val client = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)

@@ -5,7 +5,5 @@ data class EventPayLoad(
     val participated: Boolean? = null,
 ) {
     fun isNotEmpty(): Boolean = liked != null
-
     fun isNotEmptyParticipate(): Boolean = participated != null
-
 }

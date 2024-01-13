@@ -26,6 +26,4 @@ data class Event(
     val participatedByMe: Boolean = false,
 
 
-
-
     )

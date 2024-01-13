@@ -9,7 +9,7 @@ interface EventRepository {
     fun menu()
     fun share()
     fun editById(id: Long?, content: String?, callback: Callback<Event>)
-    //
+
     fun getEvents(callback: Callback<List<Event>>)
     fun likeById(id: Long, callback: Callback<Event>)
     fun saveEvent(id: Long, content: String, callback: Callback<Event>)

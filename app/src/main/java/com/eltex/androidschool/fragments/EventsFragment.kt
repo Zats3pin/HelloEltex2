@@ -1,6 +1,5 @@
 package com.eltex.androidschool.fragments
 
-import android.app.admin.NetworkEvent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,8 +16,6 @@ import androidx.core.view.isVisible
 import com.eltex.androidschool.adapter.OffsetDecoration
 import com.eltex.androidschool.repository.NetworkEventRepository
 import com.eltex.androidschool.utils.getText
-
-
 
 
 import androidx.lifecycle.flowWithLifecycle
@@ -38,8 +35,7 @@ import kotlinx.coroutines.flow.onEach
 class EventsFragment : Fragment() {
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
 
         super.onCreate(savedInstanceState)
@@ -114,30 +110,24 @@ class EventsFragment : Fragment() {
             viewModel.load()
         }
         requireActivity().supportFragmentManager.setFragmentResultListener(
-            NewPostFragment.POST_CREATED_RESULT,
-            viewLifecycleOwner
+            NewPostFragment.POST_CREATED_RESULT, viewLifecycleOwner
         ) { _, _ ->
             viewModel.load()
         }
-        viewModel.state
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .onEach { state ->
-                binding.swipeRefresh.isRefreshing = state.isRefreshing
-                val emptyError = state.emptyError
-                binding.errorGroup.isVisible = emptyError != null
-                binding.errorText.text = emptyError?.getText(requireContext())
-                binding.progress.isVisible = state.isEmptyLoading
-                state.refreshingError?.let {
-                    Toast.makeText(
-                        requireContext(),
-                        it.getText(requireContext()),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    viewModel.consumeError()
-                }
-                adapter.submitList(state.events)
+        viewModel.state.flowWithLifecycle(viewLifecycleOwner.lifecycle).onEach { state ->
+            binding.swipeRefresh.isRefreshing = state.isRefreshing
+            val emptyError = state.emptyError
+            binding.errorGroup.isVisible = emptyError != null
+            binding.errorText.text = emptyError?.getText(requireContext())
+            binding.progress.isVisible = state.isEmptyLoading
+            state.refreshingError?.let {
+                Toast.makeText(
+                    requireContext(), it.getText(requireContext()), Toast.LENGTH_SHORT
+                ).show()
+                viewModel.consumeError()
             }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+            adapter.submitList(state.events)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         return binding.root
     }
