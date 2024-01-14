@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-class NewPostFragment : Fragment() {
+class NewEventFragment : Fragment() {
 
     companion object {
         const val ARG_EVENT_ID = "ARG_EVENT_ID"

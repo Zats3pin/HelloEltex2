@@ -90,8 +90,8 @@ class EventsFragment : Fragment() {
 
                 requireParentFragment().requireParentFragment().findNavController().navigate(
                     R.id.action_bottomNavigationFragment_to_newPostFragment, bundleOf(
-                        NewPostFragment.ARG_EVENT_ID to event.id,
-                        NewPostFragment.ARG_CONTENT to event.content
+                        NewEventFragment.ARG_EVENT_ID to event.id,
+                        NewEventFragment.ARG_CONTENT to event.content
                     )
                 )
             }
@@ -111,7 +111,7 @@ class EventsFragment : Fragment() {
             viewModel.load()
         }
         requireActivity().supportFragmentManager.setFragmentResultListener(
-            NewPostFragment.POST_CREATED_RESULT, viewLifecycleOwner
+            NewEventFragment.POST_CREATED_RESULT, viewLifecycleOwner
         ) { _, _ ->
             viewModel.load()
         }

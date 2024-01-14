@@ -1,4 +1,5 @@
 package com.eltex.androidschool.api
+
 import com.eltex.androidschool.model.Event
 import retrofit2.Call
 import retrofit2.create
@@ -16,24 +17,26 @@ interface EventsApi {
     fun save(@Body event: Event): Call<Event>
 
     @POST("/api/events/{id}/likes")
-    fun like(@Path("id") id:Long): Call<Event>
+    fun like(@Path("id") id: Long): Call<Event>
 
     @DELETE("/api/events/{id}/likes")
-    fun unLike(@Body event: Long): Call<Event>
+    fun unLike(@Path("id") id: Long): Call<Event>
 
     @DELETE("/api/events/{id}")
-    fun deleteById(@Body event: Long): Call<Unit>
+    fun deleteById(@Path("id") id: Long): Call<Unit>
 
-    companion object{
-        val INSTANCE : EventsApi by lazy {
+    @POST("/api/events/{id}/participants")
+    fun participate(@Path("id") id: Long): Call<Event>
+
+    @DELETE("/api/events/{id}/participants")
+    fun unParticipate(@Path("id") id: Long): Call<Event>
+
+
+    companion object {
+        val INSTANCE: EventsApi by lazy {
             RetrofitFactory.INSTANSE.create<EventsApi>()
         }
     }
 
-    @POST("/api/events/{id}/participants")
-    fun participate(@Path("id") id:Long): Call<Event>
-
-    @DELETE("/api/events/{id}/participants")
-    fun unParticipate(@Body event: Long): Call<Event>
 
 }

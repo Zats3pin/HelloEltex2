@@ -6,7 +6,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
 
 object OkHttpFactory {
-    val INSTANSE by lazy {
+    val INSTANCE by lazy {
         OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
             .addInterceptor {
