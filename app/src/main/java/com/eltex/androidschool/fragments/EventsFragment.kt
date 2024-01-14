@@ -25,6 +25,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
 
 import com.eltex.androidschool.adapter.EventsAdapter
+import com.eltex.androidschool.api.EventsApi
 import com.eltex.androidschool.databinding.FragmentEventsBinding
 import com.eltex.androidschool.model.Event
 import com.eltex.androidschool.utils.toast
@@ -46,7 +47,7 @@ class EventsFragment : Fragment() {
             viewModelFactory {
                 initializer {
                     EventViewModel(
-                        NetworkEventRepository()
+                        NetworkEventRepository(EventsApi.INSTANCE)
                     )
                 }
             }

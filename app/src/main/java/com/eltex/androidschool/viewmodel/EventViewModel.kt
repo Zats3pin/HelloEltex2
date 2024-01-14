@@ -73,7 +73,27 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
                 }
             })
         } else {
-            // TODO HW
+            repository.unLikeById(post.id, object : Callback<Event> {
+                override fun onSuccess(data: Event) {
+                    _state.update { state ->
+                        state.copy(
+                            events = state.events.orEmpty().map {
+                                if (it.id == post.id) {
+                                    data
+                                } else {
+                                    it
+                                }
+                            },
+                            status = Status.Idle,
+                        )
+                    }
+                }
+                override fun onError(throwable: Throwable) {
+                    _state.update {
+                        it.copy(status = Status.Error(throwable))
+                    }
+                }
+            })
         }
     }
 
@@ -103,7 +123,27 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
                 }
             })
         } else {
-            // TODO HW
+            repository.unParticipate(event.id, object : Callback<Event> {
+                override fun onSuccess(data: Event) {
+                    _state.update { state ->
+                        state.copy(
+                            events = state.events.orEmpty().map {
+                                if (it.id == event.id) {
+                                    data
+                                } else {
+                                    it
+                                }
+                            },
+                            status = Status.Idle,
+                        )
+                    }
+                }
+                override fun onError(throwable: Throwable) {
+                    _state.update {
+                        it.copy(status = Status.Error(throwable))
+                    }
+                }
+            })
         }
     }
 
