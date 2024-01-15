@@ -8,11 +8,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import com.eltex.androidschool.model.Event
 import com.eltex.androidschool.model.Status
-import com.eltex.androidschool.utils.Callback
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.addTo
+import io.reactivex.rxjava3.kotlin.subscribeBy
 
 
 class EventViewModel(private val repository: EventRepository) : ViewModel() {
 
+    private val disposable = CompositeDisposable()
     private val _state: MutableStateFlow<EventUiState> = MutableStateFlow(EventUiState())
     val state: StateFlow<EventUiState> = _state.asStateFlow()
 
@@ -20,21 +23,21 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
         load()
     }
 
+
+
+
     fun load() {
         _state.update { it.copy(status = Status.Loading) }
-        repository.getEvents(object : Callback<List<Event>> {
-            override fun onSuccess(data: List<Event>) {
-                _state.update {
-                    it.copy(events = data, status = Status.Idle)
-                }
-            }
 
-            override fun onError(throwable: Throwable) {
-                _state.update {
-                    it.copy(status = Status.Error(throwable))
-                }
+        repository.getEvents().subscribeBy(onSuccess = { data ->
+            _state.update {
+                it.copy(events = data, status = Status.Idle)
             }
-        })
+        }, onError = { throwable ->
+            _state.update {
+                it.copy(status = Status.Error(throwable))
+            }
+        }).addTo(disposable)
     }
 
     fun consumeError() {
@@ -50,100 +53,96 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
     fun like(post: Event) {
         _state.update { it.copy(status = Status.Loading) }
         if (!post.likedByMe) {
-            repository.likeById(post.id, object : Callback<Event> {
-                override fun onSuccess(data: Event) {
-                    _state.update { state ->
-                        state.copy(
-                            events = state.events.orEmpty().map {
-                                if (it.id == post.id) {
-                                    data
-                                } else {
-                                    it
-                                }
-                            },
-                            status = Status.Idle,
-                        )
-                    }
+            repository.likeById(
+                post.id
+            ).subscribeBy(onSuccess = { data ->
+                _state.update { state ->
+                    state.copy(
+                        events = state.events.orEmpty().map {
+                            if (it.id == post.id) {
+                                data
+                            } else {
+                                it
+                            }
+                        },
+                        status = Status.Idle,
+                    )
                 }
-
-                override fun onError(throwable: Throwable) {
-                    _state.update {
-                        it.copy(status = Status.Error(throwable))
-                    }
+            }, onError = { throwable ->
+                _state.update {
+                    it.copy(status = Status.Error(throwable))
                 }
-            })
+            }).addTo(disposable)
         } else {
-            repository.unLikeById(post.id, object : Callback<Event> {
-                override fun onSuccess(data: Event) {
-                    _state.update { state ->
-                        state.copy(
-                            events = state.events.orEmpty().map {
-                                if (it.id == post.id) {
-                                    data
-                                } else {
-                                    it
-                                }
-                            },
-                            status = Status.Idle,
-                        )
-                    }
+            repository.unLikeById(
+                post.id
+            ).subscribeBy(onSuccess = { data ->
+                _state.update { state ->
+                    state.copy(
+                        events = state.events.orEmpty().map {
+                            if (it.id == post.id) {
+                                data
+                            } else {
+                                it
+                            }
+                        },
+                        status = Status.Idle,
+                    )
                 }
-                override fun onError(throwable: Throwable) {
-                    _state.update {
-                        it.copy(status = Status.Error(throwable))
-                    }
+            }, onError = { throwable: Throwable ->
+                _state.update {
+                    it.copy(status = Status.Error(throwable))
                 }
-            })
+            }).addTo(disposable)
         }
     }
 
     fun participate(event: Event) {
         _state.update { it.copy(status = Status.Loading) }
         if (!event.participatedByMe) {
-            repository.participate(event.id, object : Callback<Event> {
-                override fun onSuccess(data: Event) {
-                    _state.update { state ->
-                        state.copy(
-                            events = state.events.orEmpty().map {
-                                if (it.id == event.id) {
-                                    data
-                                } else {
-                                    it
-                                }
-                            },
-                            status = Status.Idle,
-                        )
-                    }
+            repository.participate(
+                event.id
+            ).subscribeBy(onSuccess = { data ->
+                _state.update { state ->
+                    state.copy(
+                        events = state.events.orEmpty().map {
+                            if (it.id == event.id) {
+                                data
+                            } else {
+                                it
+                            }
+                        },
+                        status = Status.Idle,
+                    )
                 }
-
-                override fun onError(throwable: Throwable) {
-                    _state.update {
-                        it.copy(status = Status.Error(throwable))
-                    }
+            }, onError = { throwable ->
+                _state.update {
+                    it.copy(status = Status.Error(throwable))
                 }
-            })
+            }).addTo(disposable)
         } else {
-            repository.unParticipate(event.id, object : Callback<Event> {
-                override fun onSuccess(data: Event) {
-                    _state.update { state ->
-                        state.copy(
-                            events = state.events.orEmpty().map {
-                                if (it.id == event.id) {
-                                    data
-                                } else {
-                                    it
-                                }
-                            },
-                            status = Status.Idle,
-                        )
-                    }
+            repository.unParticipate(
+                event.id
+            ).subscribeBy(onSuccess = { data ->
+                _state.update { state ->
+                    state.copy(
+                        events = state.events.orEmpty().map {
+                            if (it.id == event.id) {
+                                data
+                            } else {
+                                it
+                            }
+                        },
+                        status = Status.Idle,
+                    )
                 }
-                override fun onError(throwable: Throwable) {
+            },
+
+                onError = { throwable ->
                     _state.update {
                         it.copy(status = Status.Error(throwable))
                     }
-                }
-            })
+                }).addTo(disposable)
         }
     }
 
@@ -158,26 +157,31 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
 
     fun deleteById(id: Long) {
         _state.update { it.copy(status = Status.Loading) }
-        repository.deleteById(id, object : Callback<Unit> {
-            override fun onSuccess(data: Unit) {
-                _state.update { state ->
-                    state.copy(
-                        events = state.events.orEmpty().filter { it.id != id },
-                        status = Status.Idle,
-                    )
-                }
+        repository.deleteById(
+            id
+        ).subscribeBy(onComplete = {
+            _state.update { state ->
+                state.copy(
+                    events = state.events.orEmpty().filter { it.id != id },
+                    status = Status.Idle,
+                )
             }
+        },
 
-            override fun onError(throwable: Throwable) {
+            onError = { throwable ->
                 _state.update {
                     it.copy(status = Status.Error(throwable))
                 }
-            }
-        })
+            }).addTo(disposable)
     }
+
 
     fun editById(id: Long?, content: String?) {
         // todo
+    }
+
+    override fun onCleared() {
+        disposable.dispose()
     }
 
 }
