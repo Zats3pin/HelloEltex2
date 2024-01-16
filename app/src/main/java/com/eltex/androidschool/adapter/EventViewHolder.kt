@@ -3,7 +3,6 @@ package com.eltex.androidschool.adapter
 import androidx.recyclerview.widget.RecyclerView
 import com.eltex.androidschool.R
 import com.eltex.androidschool.databinding.CardEventBinding
-import com.eltex.androidschool.model.Event
 import com.eltex.androidschool.model.EventUiModel
 
 class EventViewHolder(
@@ -29,8 +28,12 @@ class EventViewHolder(
         binding.link.text = event.url
         binding.status.text = event.type
         binding.timeStatus.text = event.datetime
+        //binding.like.text = event.like.toString()
+        //binding.participated.text = event.participate.toString()
         updateLike(event.likedByMe)
         updateParticipated(event.participatedByMe)
+        updateLikeCount(event.like)
+        updateParticipatedCount(event.participate)
     }
 
     private fun updateLike(likedByMe: Boolean) {
@@ -62,6 +65,13 @@ class EventViewHolder(
         } else {
             0
         }.toString()
+    }
+
+    private fun updateLikeCount(likeCount: Int){
+        binding.like.text = likeCount.toString()
+    }
+    private fun updateParticipatedCount(participateCount: Int){
+        binding.participated.text = participateCount.toString()
     }
 
 }
