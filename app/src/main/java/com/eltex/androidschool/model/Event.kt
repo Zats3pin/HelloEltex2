@@ -14,10 +14,10 @@ data class Event(
     val author: String = "",
     @SerialName("published")
     val published: String = "",
-    @SerialName("link")
-    val link: String = "",
-    @SerialName("status")
-    val status: String = "",
+    @SerialName("url")
+    val url: String = "",
+    @SerialName("type")
+    val type: String = "",
     @SerialName("datetime")
     val datetime: String = "",
     @SerialName("likedByMe")
