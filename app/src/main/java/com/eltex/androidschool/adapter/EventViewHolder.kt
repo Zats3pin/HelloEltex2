@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eltex.androidschool.R
 import com.eltex.androidschool.databinding.CardEventBinding
 import com.eltex.androidschool.model.Event
+import com.eltex.androidschool.model.EventUiModel
 
 class EventViewHolder(
     private val binding: CardEventBinding,
@@ -19,7 +20,7 @@ class EventViewHolder(
     }
 
     fun bindEvent(
-        event: Event
+        event: EventUiModel
     ) {
         binding.author.text = event.author
         binding.content.text = event.content

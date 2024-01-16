@@ -1,19 +1,24 @@
 package com.eltex.androidschool.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.eltex.androidschool.mapper.EventUiModelMapper
 import com.eltex.androidschool.repository.EventRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import com.eltex.androidschool.model.Event
+import com.eltex.androidschool.model.EventUiModel
 import com.eltex.androidschool.model.Status
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.addTo
 import io.reactivex.rxjava3.kotlin.subscribeBy
 
 
-class EventViewModel(private val repository: EventRepository) : ViewModel() {
+class EventViewModel(
+    private val repository: EventRepository,
+    private val mapper: EventUiModelMapper,
+) : ViewModel() {
 
     private val disposable = CompositeDisposable()
     private val _state: MutableStateFlow<EventUiState> = MutableStateFlow(EventUiState())
@@ -29,7 +34,13 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
     fun load() {
         _state.update { it.copy(status = Status.Loading) }
 
-        repository.getEvents().subscribeBy(onSuccess = { data ->
+        repository.getEvents()
+            .map {events->
+                events.map {
+                    mapper.map(it)
+                }
+            }
+            .subscribeBy(onSuccess = { data ->
             _state.update {
                 it.copy(events = data, status = Status.Idle)
             }
@@ -50,12 +61,15 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
         }
     }
 
-    fun like(post: Event) {
+    fun like(post: EventUiModel) {
         _state.update { it.copy(status = Status.Loading) }
         if (!post.likedByMe) {
             repository.likeById(
                 post.id
-            ).subscribeBy(onSuccess = { data ->
+            ).map {
+                mapper.map(it)
+            }
+                .subscribeBy(onSuccess = { data ->
                 _state.update { state ->
                     state.copy(
                         events = state.events.orEmpty().map {
@@ -76,7 +90,9 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
         } else {
             repository.unLikeById(
                 post.id
-            ).subscribeBy(onSuccess = { data ->
+            ).map {
+                mapper.map(it)
+            }.subscribeBy(onSuccess = { data ->
                 _state.update { state ->
                     state.copy(
                         events = state.events.orEmpty().map {
@@ -97,12 +113,14 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
         }
     }
 
-    fun participate(event: Event) {
+    fun participate(event: EventUiModel) {
         _state.update { it.copy(status = Status.Loading) }
         if (!event.participatedByMe) {
             repository.participate(
                 event.id
-            ).subscribeBy(onSuccess = { data ->
+            ).map {
+                mapper.map(it)
+            }.subscribeBy(onSuccess = { data ->
                 _state.update { state ->
                     state.copy(
                         events = state.events.orEmpty().map {
@@ -123,7 +141,9 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
         } else {
             repository.unParticipate(
                 event.id
-            ).subscribeBy(onSuccess = { data ->
+            ).map {
+                mapper.map(it)
+            }.subscribeBy(onSuccess = { data ->
                 _state.update { state ->
                     state.copy(
                         events = state.events.orEmpty().map {

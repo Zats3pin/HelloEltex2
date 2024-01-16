@@ -13,11 +13,11 @@ class NetworkEventRepository(
 
     override fun getEvents(): Single<List<Event>> = api.getAll()
 
-    override fun saveEvent(id: Long, content: String): Single<Event> = api.save(
+    override fun saveEvent(id: Long, content: String,datetime: Instant): Single<Event> = api.save(
         Event(
             id = id,
             content = content,
-            datetime = "2023-12-27T19:19:49.940Z"
+            datetime = datetime,
    ))
 
     override fun deleteById(id: Long): Completable = api.deleteById(id)
