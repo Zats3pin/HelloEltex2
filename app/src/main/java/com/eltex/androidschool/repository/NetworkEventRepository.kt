@@ -17,7 +17,7 @@ class NetworkEventRepository(
         Event(
             id = id,
             content = content,
-            published = ""
+            datetime = "2023-12-27T19:19:49.940Z"
    ))
 
     override fun deleteById(id: Long): Completable = api.deleteById(id)

@@ -91,5 +91,6 @@ dependencies {
     implementation("com.squareup.retrofit2:adapter-rxjava3:2.9.0")
     // Полезные экстеншены для Kotlin
     implementation("io.reactivex.rxjava3:rxkotlin:3.0.1")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 
 }
