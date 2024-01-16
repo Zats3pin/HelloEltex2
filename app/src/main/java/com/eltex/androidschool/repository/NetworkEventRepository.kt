@@ -13,12 +13,13 @@ class NetworkEventRepository(
 
     override fun getEvents(): Single<List<Event>> = api.getAll()
 
-    override fun saveEvent(id: Long, content: String,datetime: Instant): Single<Event> = api.save(
+    override fun saveEvent(id: Long, content: String, datetime: Instant): Single<Event> = api.save(
         Event(
             id = id,
             content = content,
             datetime = datetime,
-   ))
+        )
+    )
 
     override fun deleteById(id: Long): Completable = api.deleteById(id)
 
@@ -41,7 +42,6 @@ class NetworkEventRepository(
     override fun unLikeById(id: Long): Single<Event> = api.unLike(id)
 
     override fun unParticipate(id: Long): Single<Event> = api.unParticipate(id)
-
 
 
 }

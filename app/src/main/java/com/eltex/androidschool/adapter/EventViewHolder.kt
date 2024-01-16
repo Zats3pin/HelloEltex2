@@ -28,8 +28,6 @@ class EventViewHolder(
         binding.link.text = event.url
         binding.status.text = event.type
         binding.timeStatus.text = event.datetime
-        //binding.like.text = event.like.toString()
-        //binding.participated.text = event.participate.toString()
         updateLike(event.likedByMe)
         updateParticipated(event.participatedByMe)
         updateLikeCount(event.like)
@@ -67,10 +65,11 @@ class EventViewHolder(
         }.toString()
     }
 
-    private fun updateLikeCount(likeCount: Int){
+    private fun updateLikeCount(likeCount: Int) {
         binding.like.text = likeCount.toString()
     }
-    private fun updateParticipatedCount(participateCount: Int){
+
+    private fun updateParticipatedCount(participateCount: Int) {
         binding.participated.text = participateCount.toString()
     }
 

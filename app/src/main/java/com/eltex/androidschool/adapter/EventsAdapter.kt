@@ -6,7 +6,6 @@ import android.widget.PopupMenu
 import androidx.recyclerview.widget.ListAdapter
 import com.eltex.androidschool.R
 import com.eltex.androidschool.databinding.CardEventBinding
-import com.eltex.androidschool.model.Event
 import com.eltex.androidschool.model.EventUiModel
 
 class EventsAdapter(

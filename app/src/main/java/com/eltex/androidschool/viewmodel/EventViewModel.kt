@@ -7,17 +7,19 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import com.eltex.androidschool.model.Event
 import com.eltex.androidschool.model.EventUiModel
 import com.eltex.androidschool.model.Status
+import com.eltex.androidschool.utils.SchedulersFactory
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.addTo
 import io.reactivex.rxjava3.kotlin.subscribeBy
 
 
+
 class EventViewModel(
     private val repository: EventRepository,
-    private val mapper: EventUiModelMapper,
+    private val mapper: EventUiModelMapper = EventUiModelMapper(),
+    private val schedulersFactory: SchedulersFactory = SchedulersFactory.DEFAULT,
 ) : ViewModel() {
 
     private val disposable = CompositeDisposable()
@@ -29,18 +31,14 @@ class EventViewModel(
     }
 
 
-
-
     fun load() {
         _state.update { it.copy(status = Status.Loading) }
 
-        repository.getEvents()
-            .map {events->
-                events.map {
-                    mapper.map(it)
-                }
+        repository.getEvents().observeOn(schedulersFactory.computation()).map { events ->
+            events.map {
+                mapper.map(it)
             }
-            .subscribeBy(onSuccess = { data ->
+        }.observeOn(schedulersFactory.mainThread()).subscribeBy(onSuccess = { data ->
             _state.update {
                 it.copy(events = data, status = Status.Idle)
             }
@@ -68,8 +66,7 @@ class EventViewModel(
                 post.id
             ).map {
                 mapper.map(it)
-            }
-                .subscribeBy(onSuccess = { data ->
+            }.subscribeBy(onSuccess = { data ->
                 _state.update { state ->
                     state.copy(
                         events = state.events.orEmpty().map {

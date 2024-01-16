@@ -1,7 +1,7 @@
 package com.eltex.androidschool.model
 
 
-class EventUiModel(
+data class EventUiModel(
 
 
     val id: Long = 0L,
@@ -27,3 +27,4 @@ class EventUiModel(
     val participate: Int = 0,
 
     )
+

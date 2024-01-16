@@ -3,7 +3,6 @@ package com.eltex.androidschool.model
 import com.eltex.androidschool.utils.InstantSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
 import java.time.Instant
 
 @Serializable

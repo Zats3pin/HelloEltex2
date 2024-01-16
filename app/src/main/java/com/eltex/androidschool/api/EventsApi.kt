@@ -3,7 +3,6 @@ package com.eltex.androidschool.api
 import com.eltex.androidschool.model.Event
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
-import retrofit2.Call
 import retrofit2.create
 import retrofit2.http.Body
 import retrofit2.http.DELETE

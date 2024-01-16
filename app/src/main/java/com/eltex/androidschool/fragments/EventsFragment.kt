@@ -11,24 +11,19 @@ import com.eltex.androidschool.viewmodel.EventViewModel
 import android.content.Intent
 import android.widget.Toast
 import androidx.core.os.bundleOf
-
 import androidx.core.view.isVisible
 import com.eltex.androidschool.adapter.OffsetDecoration
 import com.eltex.androidschool.repository.NetworkEventRepository
 import com.eltex.androidschool.utils.getText
-
-
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
-
 import com.eltex.androidschool.adapter.EventsAdapter
 import com.eltex.androidschool.api.EventsApi
 import com.eltex.androidschool.databinding.FragmentEventsBinding
 import com.eltex.androidschool.mapper.EventUiModelMapper
-import com.eltex.androidschool.model.Event
 import com.eltex.androidschool.model.EventUiModel
 import com.eltex.androidschool.utils.toast
 import kotlinx.coroutines.flow.launchIn

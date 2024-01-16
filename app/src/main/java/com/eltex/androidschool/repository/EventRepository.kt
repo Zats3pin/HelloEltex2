@@ -12,7 +12,7 @@ interface EventRepository {
     fun share()
 
     fun editById(id: Long, content: String): Single<Event>
-    fun getEvents():Single<List<Event>>
+    fun getEvents(): Single<List<Event>>
     fun likeById(id: Long): Single<Event>
     fun unLikeById(id: Long): Single<Event>
     fun unParticipate(id: Long): Single<Event>

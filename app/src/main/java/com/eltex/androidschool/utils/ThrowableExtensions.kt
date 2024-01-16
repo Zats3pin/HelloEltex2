@@ -6,7 +6,7 @@ import java.io.IOException
 
 
 fun Throwable.getText(context: Context): String = when (this) {
-       is IOException -> context.getString(R.string.network_error)
-        else -> context.getString(R.string.unknown_error)
+    is IOException -> context.getString(R.string.network_error)
+    else -> context.getString(R.string.unknown_error)
 
 }

@@ -1,4 +1,5 @@
 package com.eltex.androidschool.utils
+
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 

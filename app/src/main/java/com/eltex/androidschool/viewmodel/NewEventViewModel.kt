@@ -12,24 +12,22 @@ import kotlinx.coroutines.flow.update
 import java.time.Instant
 
 private val disposable = CompositeDisposable()
+
 class NewEventViewModel(
-    private val repository: EventRepository,
-    private val eventId: Long
+    private val repository: EventRepository, private val eventId: Long
 ) : ViewModel() {
     private val _state = MutableStateFlow(NewPostUiState())
     val state = _state.asStateFlow()
     fun save(content: String) {
         repository.saveEvent(
             eventId, content, datetime = Instant.now()
-        ).subscribeBy(
-            onSuccess = { data ->
-                _state.update { it.copy(result = data, status = Status.Idle) }
-            },
+        ).subscribeBy(onSuccess = { data ->
+            _state.update { it.copy(result = data, status = Status.Idle) }
+        },
 
-            onError = {throwable ->
+            onError = { throwable ->
                 _state.update { it.copy(status = Status.Error(throwable)) }
-            }
-        ).addTo(disposable)
+            }).addTo(disposable)
     }
 
     fun consumeError() {
@@ -37,14 +35,11 @@ class NewEventViewModel(
     }
 
     fun edit(eventId: Long, content: String) {
-        repository.editById(eventId, content).subscribeBy(
-            onSuccess = { data ->
-                _state.update { it.copy(result = data, status = Status.Idle) }
-            },
-            onError = {throwable ->
-                _state.update { it.copy(status = Status.Error(throwable)) }
-            }
-        ).addTo(disposable)
+        repository.editById(eventId, content).subscribeBy(onSuccess = { data ->
+            _state.update { it.copy(result = data, status = Status.Idle) }
+        }, onError = { throwable ->
+            _state.update { it.copy(status = Status.Error(throwable)) }
+        }).addTo(disposable)
     }
 
     override fun onCleared() {
