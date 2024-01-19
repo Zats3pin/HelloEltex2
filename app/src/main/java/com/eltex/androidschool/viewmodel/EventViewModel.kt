@@ -1,6 +1,7 @@
 package com.eltex.androidschool.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.eltex.androidschool.mapper.EventUiModelMapper
 import com.eltex.androidschool.repository.EventRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -9,20 +10,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import com.eltex.androidschool.model.EventUiModel
 import com.eltex.androidschool.model.Status
-import com.eltex.androidschool.utils.SchedulersFactory
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.kotlin.addTo
-import io.reactivex.rxjava3.kotlin.subscribeBy
-
+import kotlinx.coroutines.launch
 
 
 class EventViewModel(
     private val repository: EventRepository,
     private val mapper: EventUiModelMapper = EventUiModelMapper(),
-    private val schedulersFactory: SchedulersFactory = SchedulersFactory.DEFAULT,
 ) : ViewModel() {
 
-    private val disposable = CompositeDisposable()
     private val _state: MutableStateFlow<EventUiState> = MutableStateFlow(EventUiState())
     val state: StateFlow<EventUiState> = _state.asStateFlow()
 
@@ -34,19 +29,128 @@ class EventViewModel(
     fun load() {
         _state.update { it.copy(status = Status.Loading) }
 
-        repository.getEvents().observeOn(schedulersFactory.computation()).map { events ->
-            events.map {
-                mapper.map(it)
+        viewModelScope.launch {
+
+            try {
+                val events = repository.getEvents().map {
+                    mapper.map(it)
+                }
+
+
+                _state.update {
+                    it.copy(events = events, status = Status.Idle)
+                }
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(status = Status.Error(e))
+                }
             }
-        }.observeOn(schedulersFactory.mainThread()).subscribeBy(onSuccess = { data ->
-            _state.update {
-                it.copy(events = data, status = Status.Idle)
+        }
+    }
+
+
+    fun like(event: EventUiModel) {
+        _state.update { it.copy(status = Status.Loading) }
+        viewModelScope.launch {
+            try {
+                val result = if (!event.likedByMe) {
+                    repository.likeById(event.id)
+                } else {
+                    repository.unLikeById(event.id)
+                }
+                val uiModel = mapper.map(result)
+                _state.update { state ->
+                    state.copy(
+                        events = state.events.orEmpty()
+                            .map {
+                                if (it.id == result.id) {
+                                    uiModel
+                                } else {
+                                    it
+                                }
+                            },
+                        status = Status.Idle,
+                    )
+                }
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(status = Status.Error(e))
+                }
             }
-        }, onError = { throwable ->
-            _state.update {
-                it.copy(status = Status.Error(throwable))
+        }
+    }
+
+    fun participate(event: EventUiModel) {
+        _state.update { it.copy(status = Status.Loading) }
+        viewModelScope.launch {
+            try {
+                val result = if (!event.participatedByMe) {
+                    repository.participate(event.id)
+                } else {
+                    repository.unParticipate(event.id)
+                }
+                val uiModel = mapper.map(result)
+                _state.update { state ->
+                    state.copy(
+                        events = state.events.orEmpty().map {
+                            if (it.id == event.id) {
+                                uiModel
+                            } else {
+                                it
+                            }
+                        },
+                        status = Status.Idle,
+                    )
+                }
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(status = Status.Error(e))
+                }
             }
-        }).addTo(disposable)
+        }
+    }
+
+
+    fun menu() {
+        viewModelScope.launch {
+            try {
+                repository.menu()
+            } catch (e: Exception) {
+                //TODO
+            }
+        }
+    }
+
+    fun share() {
+        viewModelScope.launch {
+            try {
+                repository.share()
+            } catch (e: Exception) {
+                //TODO
+            }
+        }
+    }
+
+    fun deleteById(id: Long) {
+        _state.update { it.copy(status = Status.Loading) }
+
+        viewModelScope.launch {
+
+            try {
+                repository.deleteById(id)
+
+                _state.update { state ->
+                    state.copy(
+                        events = state.events.orEmpty().filter { it.id != id },
+                        status = Status.Idle,
+                    )
+                }
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(status = Status.Error(e))
+                }
+            }
+        }
     }
 
     fun consumeError() {
@@ -57,148 +161,6 @@ class EventViewModel(
                 it
             }
         }
-    }
-
-    fun like(post: EventUiModel) {
-        _state.update { it.copy(status = Status.Loading) }
-        if (!post.likedByMe) {
-            repository.likeById(
-                post.id
-            ).map {
-                mapper.map(it)
-            }.subscribeBy(onSuccess = { data ->
-                _state.update { state ->
-                    state.copy(
-                        events = state.events.orEmpty().map {
-                            if (it.id == post.id) {
-                                data
-                            } else {
-                                it
-                            }
-                        },
-                        status = Status.Idle,
-                    )
-                }
-            }, onError = { throwable ->
-                _state.update {
-                    it.copy(status = Status.Error(throwable))
-                }
-            }).addTo(disposable)
-        } else {
-            repository.unLikeById(
-                post.id
-            ).map {
-                mapper.map(it)
-            }.subscribeBy(onSuccess = { data ->
-                _state.update { state ->
-                    state.copy(
-                        events = state.events.orEmpty().map {
-                            if (it.id == post.id) {
-                                data
-                            } else {
-                                it
-                            }
-                        },
-                        status = Status.Idle,
-                    )
-                }
-            }, onError = { throwable: Throwable ->
-                _state.update {
-                    it.copy(status = Status.Error(throwable))
-                }
-            }).addTo(disposable)
-        }
-    }
-
-    fun participate(event: EventUiModel) {
-        _state.update { it.copy(status = Status.Loading) }
-        if (!event.participatedByMe) {
-            repository.participate(
-                event.id
-            ).map {
-                mapper.map(it)
-            }.subscribeBy(onSuccess = { data ->
-                _state.update { state ->
-                    state.copy(
-                        events = state.events.orEmpty().map {
-                            if (it.id == event.id) {
-                                data
-                            } else {
-                                it
-                            }
-                        },
-                        status = Status.Idle,
-                    )
-                }
-            }, onError = { throwable ->
-                _state.update {
-                    it.copy(status = Status.Error(throwable))
-                }
-            }).addTo(disposable)
-        } else {
-            repository.unParticipate(
-                event.id
-            ).map {
-                mapper.map(it)
-            }.subscribeBy(onSuccess = { data ->
-                _state.update { state ->
-                    state.copy(
-                        events = state.events.orEmpty().map {
-                            if (it.id == event.id) {
-                                data
-                            } else {
-                                it
-                            }
-                        },
-                        status = Status.Idle,
-                    )
-                }
-            },
-
-                onError = { throwable ->
-                    _state.update {
-                        it.copy(status = Status.Error(throwable))
-                    }
-                }).addTo(disposable)
-        }
-    }
-
-
-    fun menu() {
-        repository.menu()
-    }
-
-    fun share() {
-        repository.share()
-    }
-
-    fun deleteById(id: Long) {
-        _state.update { it.copy(status = Status.Loading) }
-        repository.deleteById(
-            id
-        ).subscribeBy(onComplete = {
-            _state.update { state ->
-                state.copy(
-                    events = state.events.orEmpty().filter { it.id != id },
-                    status = Status.Idle,
-                )
-            }
-        },
-
-            onError = { throwable ->
-                _state.update {
-                    it.copy(status = Status.Error(throwable))
-                }
-            }).addTo(disposable)
-    }
-
-
-    fun editById(id: Long?, content: String?) {
-        // todo
-    }
-
-    override fun onCleared() {
-        disposable.dispose()
     }
 
 }

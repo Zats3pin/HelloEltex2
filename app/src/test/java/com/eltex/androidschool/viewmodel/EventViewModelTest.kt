@@ -1,7 +1,5 @@
 package com.eltex.androidschool.viewmodel
 
-import com.eltex.androidschool.TestSchedulersFactory
-import com.eltex.androidschool.mapper.EventUiModelMapper
 import com.eltex.androidschool.model.Event
 import com.eltex.androidschool.model.Status
 import com.eltex.androidschool.repository.EventRepository

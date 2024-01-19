@@ -2,8 +2,6 @@ package com.eltex.androidschool.repository
 
 import com.eltex.androidschool.api.EventsApi
 import com.eltex.androidschool.model.Event
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Single
 import java.time.Instant
 
 
@@ -11,9 +9,9 @@ class NetworkEventRepository(
     private val api: EventsApi
 ) : EventRepository {
 
-    override fun getEvents(): Single<List<Event>> = api.getAll()
+    override suspend fun getEvents(): List<Event> = api.getAll()
 
-    override fun saveEvent(id: Long, content: String, datetime: Instant): Single<Event> = api.save(
+    override suspend fun saveEvent(id: Long, content: String, datetime: Instant): Event = api.save(
         Event(
             id = id,
             content = content,
@@ -21,27 +19,27 @@ class NetworkEventRepository(
         )
     )
 
-    override fun deleteById(id: Long): Completable = api.deleteById(id)
+    override suspend fun deleteById(id: Long) = api.deleteById(id)
 
 
-    override fun participate(id: Long): Single<Event> = api.participate(id)
+    override suspend fun participate(id: Long): Event = api.participate(id)
 
-    override fun menu() {
+    override suspend fun menu() {
         TODO("Not yet implemented")
     }
 
-    override fun share() {
+    override suspend fun share() {
         TODO("Not yet implemented")
     }
 
-    override fun editById(id: Long, content: String): Single<Event> = api.save(Event(id, content))
+    override suspend fun editById(id: Long, content: String): Event = api.save(Event(id, content))
 
 
-    override fun likeById(id: Long): Single<Event> = api.like(id)
+    override suspend fun likeById(id: Long): Event = api.like(id)
 
-    override fun unLikeById(id: Long): Single<Event> = api.unLike(id)
+    override suspend fun unLikeById(id: Long): Event = api.unLike(id)
 
-    override fun unParticipate(id: Long): Single<Event> = api.unParticipate(id)
+    override suspend fun unParticipate(id: Long): Event = api.unParticipate(id)
 
 
 }

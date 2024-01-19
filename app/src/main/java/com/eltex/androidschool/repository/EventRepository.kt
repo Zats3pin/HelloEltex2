@@ -7,17 +7,17 @@ import java.time.Instant
 
 
 interface EventRepository {
-    fun participate(id: Long): Single<Event>
-    fun menu()
-    fun share()
+    suspend fun participate(id: Long): Event
+    suspend fun menu()
+    suspend fun share()
 
-    fun editById(id: Long, content: String): Single<Event>
-    fun getEvents(): Single<List<Event>>
-    fun likeById(id: Long): Single<Event>
-    fun unLikeById(id: Long): Single<Event>
-    fun unParticipate(id: Long): Single<Event>
+    suspend fun editById(id: Long, content: String): Event
+    suspend fun getEvents(): List<Event>
+    suspend fun likeById(id: Long): Event
+    suspend fun unLikeById(id: Long): Event
+    suspend fun unParticipate(id: Long): Event
 
-    fun saveEvent(id: Long, content: String, datetime: Instant): Single<Event>
-    fun deleteById(id: Long): Completable
+    suspend fun saveEvent(id: Long, content: String, datetime: Instant): Event
+    suspend fun deleteById(id: Long)
 
 }

@@ -94,5 +94,6 @@ dependencies {
     // Полезные экстеншены для Kotlin
     implementation("io.reactivex.rxjava3:rxkotlin:3.0.1")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
-
+    // тесты для корутин
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 }

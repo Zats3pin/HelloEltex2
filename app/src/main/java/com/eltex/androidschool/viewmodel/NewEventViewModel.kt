@@ -1,6 +1,7 @@
 package com.eltex.androidschool.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.eltex.androidschool.model.Status
 import com.eltex.androidschool.repository.EventRepository
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -9,6 +10,7 @@ import io.reactivex.rxjava3.kotlin.subscribeBy
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.time.Instant
 
 private val disposable = CompositeDisposable()
@@ -18,28 +20,42 @@ class NewEventViewModel(
 ) : ViewModel() {
     private val _state = MutableStateFlow(NewPostUiState())
     val state = _state.asStateFlow()
-    fun save(content: String) {
-        repository.saveEvent(
-            eventId, content, datetime = Instant.now()
-        ).subscribeBy(onSuccess = { data ->
-            _state.update { it.copy(result = data, status = Status.Idle) }
-        },
 
-            onError = { throwable ->
-                _state.update { it.copy(status = Status.Error(throwable)) }
-            }).addTo(disposable)
+
+    suspend fun save(content: String) {
+
+        viewModelScope.launch {
+            try {
+                val data = repository.saveEvent(
+                    eventId, content, datetime = Instant.now()
+                )
+                _state.update {
+                    it.copy(result = data, status = Status.Idle)
+                }
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(status = Status.Error(e))
+                }
+            }
+        }
+
     }
 
     fun consumeError() {
         _state.update { it.copy(status = Status.Idle) }
     }
 
-    fun edit(eventId: Long, content: String) {
-        repository.editById(eventId, content).subscribeBy(onSuccess = { data ->
-            _state.update { it.copy(result = data, status = Status.Idle) }
-        }, onError = { throwable ->
-            _state.update { it.copy(status = Status.Error(throwable)) }
-        }).addTo(disposable)
+    suspend fun edit(eventId: Long, content: String) {
+        viewModelScope.launch {
+            try {
+                val data = repository.editById(eventId, content)
+                _state.update { it.copy(result = data, status = Status.Idle) }
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(status = Status.Error(e))
+                }
+            }
+        }
     }
 
     override fun onCleared() {
