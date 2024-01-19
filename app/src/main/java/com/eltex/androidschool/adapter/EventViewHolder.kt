@@ -11,11 +11,19 @@ class EventViewHolder(
 
     fun bindEvent(payLoad: EventPayLoad) {
         if (payLoad.liked != null) {
-            updateLike(payLoad.liked)
+            updateLikeIcon(payLoad.liked)
         }
         if (payLoad.participated != null) {
-            updateParticipated(payLoad.participated)
+            updateParticipatedIcon(payLoad.participated)
         }
+
+        if (payLoad.like != null) {
+            updateLikeCount(payLoad.like)
+        }
+        if (payLoad.participate != null) {
+            updateParticipatedCount(payLoad.participate)
+        }
+
     }
 
     fun bindEvent(
@@ -28,13 +36,13 @@ class EventViewHolder(
         binding.link.text = event.url
         binding.status.text = event.type
         binding.timeStatus.text = event.datetime
-        updateLike(event.likedByMe)
-        updateParticipated(event.participatedByMe)
+        updateLikeIcon(event.likedByMe)
+        updateParticipatedIcon(event.participatedByMe)
         updateLikeCount(event.like)
         updateParticipatedCount(event.participate)
     }
 
-    private fun updateLike(likedByMe: Boolean) {
+    private fun updateLikeIcon(likedByMe: Boolean) {
 
         binding.like.setIconResource(
             if (likedByMe) {
@@ -43,14 +51,9 @@ class EventViewHolder(
                 R.drawable.baseline_favorite_border_24
             }
         )
-        binding.like.text = if (likedByMe) {
-            1
-        } else {
-            0
-        }.toString()
     }
 
-    private fun updateParticipated(participatedByMe: Boolean) {
+    private fun updateParticipatedIcon(participatedByMe: Boolean) {
         binding.participated.setIconResource(
             if (participatedByMe) {
                 R.drawable.event_true
@@ -58,11 +61,6 @@ class EventViewHolder(
                 R.drawable.event
             }
         )
-        binding.participated.text = if (participatedByMe) {
-            1
-        } else {
-            0
-        }.toString()
     }
 
     private fun updateLikeCount(likeCount: Int) {

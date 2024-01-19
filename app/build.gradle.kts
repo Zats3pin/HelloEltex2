@@ -86,11 +86,11 @@ dependencies {
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
 
     // RxJava
-    implementation("io.reactivex.rxjava3:rxjava:3.1.7")
+    //implementation("io.reactivex.rxjava3:rxjava:3.1.7")
     // Функции для работы с MainThread
-    implementation("io.reactivex.rxjava3:rxandroid:3.0.2")
+    //implementation("io.reactivex.rxjava3:rxandroid:3.0.2")
     // Adapter для retrofit
-    implementation("com.squareup.retrofit2:adapter-rxjava3:2.9.0")
+    //implementation("com.squareup.retrofit2:adapter-rxjava3:2.9.0")
     // Полезные экстеншены для Kotlin
     implementation("io.reactivex.rxjava3:rxkotlin:3.0.1")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")

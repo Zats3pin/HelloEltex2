@@ -15,6 +15,9 @@ class EventItemCallback : ItemCallback<EventUiModel>() {
         EventPayLoad(
             liked = newItem.likedByMe.takeIf { it != oldItem.likedByMe },
             participated = newItem.participatedByMe.takeIf { it != oldItem.participatedByMe },
-        ).takeIf { it.isNotEmpty() || it.isNotEmptyParticipate() }
+            like = newItem.like.takeIf { it != oldItem.like },
+            participate = newItem.participate.takeIf { it != oldItem.participate },
+
+            ).takeIf { it.isNotEmpty() || it.isNotEmptyParticipate() }
 }
 

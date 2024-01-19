@@ -3,8 +3,6 @@ package com.eltex.androidschool.viewmodel
 import com.eltex.androidschool.model.Event
 import com.eltex.androidschool.model.Status
 import com.eltex.androidschool.repository.EventRepository
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Single
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.time.Instant
@@ -17,33 +15,32 @@ class EventViewModelTest {
 
         val viewModel = EventViewModel(
             repository = object : EventRepository {
-                override fun participate(id: Long): Single<Event> = Single.never()
-                override fun menu() {
+                override suspend fun participate(id: Long): Event = error("Not implemented")
+                override suspend fun menu() {
                     TODO("Not yet implemented")
                 }
 
-                override fun share() {
+                override suspend fun share() {
                     TODO("Not yet implemented")
                 }
 
-                override fun editById(id: Long, content: String): Single<Event> = Single.never()
+                override suspend fun editById(id: Long, content: String): Event = error("Not implemented")
 
-                override fun getEvents(): Single<List<Event>> = Single.just(emptyList())
+                override suspend fun getEvents(): List<Event> = emptyList()
 
-                override fun likeById(id: Long): Single<Event> = Single.never()
+                override suspend fun likeById(id: Long): Event = error("Not implemented")
 
-                override fun unLikeById(id: Long): Single<Event> = Single.never()
+                override suspend fun unLikeById(id: Long): Event = error("Not implemented")
 
-                override fun unParticipate(id: Long): Single<Event> = Single.never()
+                override suspend fun unParticipate(id: Long): Event = error("Not implemented")
 
-                override fun saveEvent(
+                override suspend fun saveEvent(
                     id: Long, content: String, datetime: Instant
-                ): Single<Event> = Single.never()
+                ): Event = error("Not implemented")
 
-                override fun deleteById(id: Long): Completable = Completable.error(testError)
+                override suspend fun deleteById(id: Long) = throw testError
 
             },
-            schedulersFactory = TestSchedulersFactory,
         )
         viewModel.deleteById(123)
 
