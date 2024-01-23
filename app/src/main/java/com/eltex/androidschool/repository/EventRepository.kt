@@ -5,6 +5,8 @@ import java.time.Instant
 
 
 interface EventRepository {
+    suspend fun getLatest(count: Int): List<Event>
+    suspend fun getBefore(id: Long, count: Int): List<Event>
     suspend fun participate(id: Long): Event
     suspend fun menu()
     suspend fun share()

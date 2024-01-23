@@ -2,7 +2,7 @@ package com.eltex.androidschool.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eltex.androidschool.model.Status
+import com.eltex.androidschool.utils.Status
 import com.eltex.androidschool.repository.EventRepository
 
 import kotlinx.coroutines.flow.MutableStateFlow

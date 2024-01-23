@@ -14,7 +14,7 @@ interface EventsApi {
     suspend fun getLatest(@Query("count") count: Int): List<Event>
 
     @GET("/api/events/{id}/before")
-    suspend fun getLatest(@Path("id") id: Long, @Query("count") count: Int): List<Event>
+    suspend fun getBefore(@Path("id") id: Long, @Query("count") count: Int): List<Event>
 
     @POST("/api/events")
     suspend fun save(@Body event: Event): Event

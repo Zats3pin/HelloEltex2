@@ -23,8 +23,12 @@ import androidx.navigation.fragment.findNavController
 import com.eltex.androidschool.adapter.EventsAdapter
 import com.eltex.androidschool.api.EventsApi
 import com.eltex.androidschool.databinding.FragmentEventsBinding
-import com.eltex.androidschool.mapper.EventUiModelMapper
+import com.eltex.androidschool.effecthandler.EventEffectHandler
+import com.eltex.androidschool.model.EventMessage
 import com.eltex.androidschool.model.EventUiModel
+import com.eltex.androidschool.model.EventUiState
+import com.eltex.androidschool.mvi.Store
+import com.eltex.androidschool.reducer.EventReducer
 import com.eltex.androidschool.utils.toast
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -44,8 +48,12 @@ class EventsFragment : Fragment() {
             viewModelFactory {
                 initializer {
                     EventViewModel(
-                        NetworkEventRepository(EventsApi.INSTANCE),
-                        EventUiModelMapper(),
+                        Store(
+                            EventReducer(),
+                            EventEffectHandler(NetworkEventRepository(EventsApi.INSTANCE)),
+                            setOf(EventMessage.Refresh),
+                            EventUiState(),
+                        )
                     )
                 }
             }
@@ -56,11 +64,11 @@ class EventsFragment : Fragment() {
 
 
             override fun onLikeClickListener(event: EventUiModel) {
-                viewModel.like(event)
+                viewModel.accept(EventMessage.Like(event))
             }
 
             override fun onParticipatedClickListener(event: EventUiModel) {
-                viewModel.participate(event)
+                viewModel.accept(EventMessage.Participate(event))
             }
 
             override fun onShareClickListener(event: EventUiModel) {
@@ -80,7 +88,7 @@ class EventsFragment : Fragment() {
 
 
             override fun onDeleteClickListener(event: EventUiModel) {
-                viewModel.deleteById(event.id)
+                viewModel.accept(EventMessage.Delete(event))
             }
 
 
@@ -103,15 +111,15 @@ class EventsFragment : Fragment() {
 
 
         binding.swipeRefresh.setOnRefreshListener {
-            viewModel.load()
+            viewModel.accept(EventMessage.Refresh)
         }
         binding.retryButton.setOnClickListener {
-            viewModel.load()
+            viewModel.accept(EventMessage.Refresh)
         }
         requireActivity().supportFragmentManager.setFragmentResultListener(
             NewEventFragment.POST_CREATED_RESULT, viewLifecycleOwner
         ) { _, _ ->
-            viewModel.load()
+            viewModel.accept(EventMessage.Refresh)
         }
         viewModel.state.flowWithLifecycle(viewLifecycleOwner.lifecycle).onEach { state ->
             binding.swipeRefresh.isRefreshing = state.isRefreshing
@@ -119,11 +127,11 @@ class EventsFragment : Fragment() {
             binding.errorGroup.isVisible = emptyError != null
             binding.errorText.text = emptyError?.getText(requireContext())
             binding.progress.isVisible = state.isEmptyLoading
-            state.refreshingError?.let {
+            state.singleError?.let {
                 Toast.makeText(
                     requireContext(), it.getText(requireContext()), Toast.LENGTH_SHORT
                 ).show()
-                viewModel.consumeError()
+                viewModel.accept(EventMessage.HandleError)
             }
             adapter.submitList(state.events)
         }.launchIn(viewLifecycleOwner.lifecycleScope)

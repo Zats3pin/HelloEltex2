@@ -1,4 +1,4 @@
-package com.eltex.androidschool.model
+package com.eltex.androidschool.utils
 
 sealed interface Status {
     data object Idle : Status

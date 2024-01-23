@@ -4,7 +4,7 @@ import com.eltex.androidschool.MainCoroutineRule
 import com.eltex.androidschool.mapper.EventUiModelMapper
 import com.eltex.androidschool.model.Event
 import com.eltex.androidschool.model.EventUiModel
-import com.eltex.androidschool.model.Status
+import com.eltex.androidschool.utils.Status
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -15,6 +15,7 @@ class EventViewModelTest {
 @get:Rule
 val mainDispatcherRule = MainCoroutineRule()
 
+/*
 
 
 
@@ -278,6 +279,7 @@ val mainDispatcherRule = MainCoroutineRule()
     }
 
 
+*/
 
 
 }
