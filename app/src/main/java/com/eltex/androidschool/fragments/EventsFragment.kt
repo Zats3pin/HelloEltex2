@@ -45,8 +45,6 @@ class EventsFragment : Fragment() {
         val binding = FragmentEventsBinding.inflate(inflater, container, false)//
 
 
-
-
         val viewModel by viewModels<EventViewModel> {
             viewModelFactory {
                 initializer {
@@ -61,7 +59,6 @@ class EventsFragment : Fragment() {
                 }
             }
         }
-
 
         val adapter = EventsAdapter(object : EventsAdapter.EventListener {
 
@@ -121,23 +118,10 @@ class EventsFragment : Fragment() {
             }
         )
 
-        //      binding.list.addOnChildAttachStateChangeListener(
-        //   object : RecyclerView.OnChildAttachStateChangeListener {
-        //    override fun onChildViewAttachedToWindow(view: View) {
-        //    val count = adapter.itemCount
-        //    val position = binding.list.getChildAdapterPosition(view)
-        //    if (position != count - 3) return
-        //    viewModel.accept(EventMessage.LoadNextPage)
-        //    }
-        //    override fun onChildViewDetachedFromWindow(view: View) = Unit
-        //    }
-       // )
-
 
         binding.list.adapter = adapter
 
         binding.list.addItemDecoration(OffsetDecoration(resources.getDimensionPixelSize(R.dimen.small_spacing)))
-
 
 
         binding.swipeRefresh.setOnRefreshListener {
@@ -168,7 +152,6 @@ class EventsFragment : Fragment() {
 
         return binding.root
     }
-
 }
 
 

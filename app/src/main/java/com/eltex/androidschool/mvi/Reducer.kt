@@ -5,8 +5,8 @@ interface Reducer<State, Effect, Message> {
 }
 
 data class ReducerResult<State, Effect>(
- val state: State,
- val effects:Set<Effect>,
-){
-    constructor(state: State, effect:Effect? = null): this(state, setOfNotNull(effect))
+    val state: State,
+    val effects: Set<Effect>,
+) {
+    constructor(state: State, effect: Effect? = null) : this(state, setOfNotNull(effect))
 }

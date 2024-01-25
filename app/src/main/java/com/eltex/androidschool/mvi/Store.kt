@@ -25,6 +25,7 @@ class Store<State, Message, Effect>(
     fun accept(message: Message) {
         messages.tryEmit(message)
     }
+
     suspend fun connect() = coroutineScope {
         launch {
             effectHandler.connect(effects)
@@ -38,7 +39,7 @@ class Store<State, Message, Effect>(
                 .map {
                     reducer.reducer(_state.value, it)
                 }
-                .collect{
+                .collect {
                     _state.value = it.state
                     it.effects.forEach(effects::tryEmit)
                 }
