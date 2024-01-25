@@ -20,6 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.eltex.androidschool.adapter.EventsAdapter
 import com.eltex.androidschool.api.EventsApi
 import com.eltex.androidschool.databinding.FragmentEventsBinding
@@ -42,6 +43,8 @@ class EventsFragment : Fragment() {
 
         super.onCreate(savedInstanceState)
         val binding = FragmentEventsBinding.inflate(inflater, container, false)//
+
+
 
 
         val viewModel by viewModels<EventViewModel> {
@@ -101,7 +104,34 @@ class EventsFragment : Fragment() {
                     )
                 )
             }
-        })
+        }
+        )
+
+
+        binding.list.addOnChildAttachStateChangeListener(
+            object : RecyclerView.OnChildAttachStateChangeListener {
+                override fun onChildViewAttachedToWindow(view: View) {
+                    val position = binding.list.getChildAdapterPosition(view)
+                    if (position != RecyclerView.NO_POSITION && position == adapter.itemCount - 3) {
+                        viewModel.accept(EventMessage.LoadNextPage)
+                    }
+                }
+
+                override fun onChildViewDetachedFromWindow(view: View) = Unit
+            }
+        )
+
+        //      binding.list.addOnChildAttachStateChangeListener(
+        //   object : RecyclerView.OnChildAttachStateChangeListener {
+        //    override fun onChildViewAttachedToWindow(view: View) {
+        //    val count = adapter.itemCount
+        //    val position = binding.list.getChildAdapterPosition(view)
+        //    if (position != count - 3) return
+        //    viewModel.accept(EventMessage.LoadNextPage)
+        //    }
+        //    override fun onChildViewDetachedFromWindow(view: View) = Unit
+        //    }
+       // )
 
 
         binding.list.adapter = adapter

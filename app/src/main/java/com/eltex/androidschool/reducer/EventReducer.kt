@@ -10,12 +10,30 @@ import com.eltex.androidschool.utils.Either
 
 class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
     override fun reducer(
-        old: EventUiState,
-        message: EventMessage
+        old: EventUiState, message: EventMessage
     ): ReducerResult<EventUiState, EventEffect> = when (message) {
-        is EventMessage.Delete -> TODO()
-        is EventMessage.DeleteError -> TODO()
-        EventMessage.HandleError -> TODO()
+        is EventMessage.Delete -> ReducerResult(
+            old.copy(events = old.events.filter {
+                it.id != message.event.id
+            }), EventEffect.Delete(message.event)
+        )
+
+        is EventMessage.DeleteError -> ReducerResult(
+            old.copy(
+                events = buildList(old.events.size + 1) {
+                    val eventUiModel = message.error.eventUiModel
+                    addAll(old.events.takeWhile {
+                        it.id > message.error.eventUiModel.id
+                    })
+                    add(message.error.eventUiModel)
+                    addAll(old.events.takeLastWhile {
+                        it.id < message.error.eventUiModel.id
+                    })
+                }, singleError = message.error.throwable
+            )
+        )
+
+        EventMessage.HandleError -> ReducerResult(old.copy(singleError = null))
         is EventMessage.InitialLoaded -> ReducerResult(
             when (val result = message.result) {
                 is Either.Left -> if (old.events.isEmpty()) {
@@ -24,15 +42,64 @@ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
                     old.copy(singleError = result.value)
                 }
 
-                is Either.Right ->
-                    old.copy(events = result.value, status = EventStatus.Idle)
+                is Either.Right -> old.copy(events = result.value, status = EventStatus.Idle)
             }
         )
 
-        is EventMessage.Like -> TODO()
-        is EventMessage.LikeResult -> TODO()
-        EventMessage.LoadNextPage -> TODO()
-        is EventMessage.NextPageLoaded -> TODO()
+        is EventMessage.Like -> ReducerResult(old.copy(events = old.events.map {
+            if (it.id == message.event.id) {
+                message.event.copy(
+                    likedByMe = !message.event.likedByMe,
+                    like = if (message.event.likedByMe) {
+                        message.event.like - 1
+                    } else {
+                        message.event.like + 1
+                    }
+                )
+            } else {
+                it
+            }
+        }), EventEffect.Like(message.event))
+
+        is EventMessage.LikeResult -> when (val result = message.result) {
+            is Either.Left -> ReducerResult(
+                old.copy(
+                    events = old.events.map {
+                        if (it.id == result.value.eventUiModel.id) {
+                            result.value.eventUiModel
+                        } else {
+                            it
+                        }
+                    }, singleError = result.value.throwable
+                )
+            )
+
+            is Either.Right -> ReducerResult(old.copy(events = old.events.map {
+                if (it.id == result.value.id) {
+                    result.value
+                } else {
+                    it
+                }
+            }))
+        }
+
+        EventMessage.LoadNextPage -> ReducerResult(
+            old.copy(status = EventStatus.NextPageLoading),
+            EventEffect.LoadNextPage(old.events.last().id, 5)
+        )
+
+        is EventMessage.NextPageLoaded -> ReducerResult(
+            when (val result = message.result) {
+                is Either.Left -> old.copy(
+                    status = EventStatus.NextPageError(result.value)
+                )
+
+                is Either.Right -> old.copy(
+                    events = old.events + result.value, status = EventStatus.Idle
+                )
+            }
+        )
+
         is EventMessage.Participate -> TODO()
         EventMessage.Refresh -> ReducerResult(
             old.copy(
@@ -41,8 +108,7 @@ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
                 } else {
                     EventStatus.Refreshing
                 },
-            ),
-            EventEffect.LoadInitialPage(15)
+            ), EventEffect.LoadInitialPage(15)
         )
     }
 
