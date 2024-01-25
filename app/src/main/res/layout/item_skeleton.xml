@@ -16,7 +16,7 @@
         tools:context=".activity.MainActivity">
 
         <ImageView
-            android:id="@+id/avatar"
+            android:id="@+id/avatar_skeleton"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:contentDescription="@string/avatar"
@@ -27,16 +27,16 @@
 
 
         <TextView
-            android:foreground="?colorOutlineVariant"
-            android:id="@+id/author"
+            android:id="@+id/author_skeleton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/common_spacing"
             android:ellipsize="end"
+            android:foreground="?colorOutlineVariant"
             android:maxLines="1"
             app:layout_constraintBottom_toTopOf="@id/author0fPublished"
-            app:layout_constraintEnd_toStartOf="@id/menu"
-            app:layout_constraintStart_toEndOf="@id/avatar"
+            app:layout_constraintEnd_toStartOf="@id/menu_skeleton"
+            app:layout_constraintStart_toEndOf="@id/avatar_skeleton"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Lydia Westervelt" />
 
@@ -44,24 +44,24 @@
             android:id="@+id/author0fPublished"
             android:layout_width="wrap_content"
             android:layout_height="4dp"
-            app:layout_constraintBottom_toTopOf="@id/published"
-            app:layout_constraintStart_toEndOf="@id/avatar"
-            app:layout_constraintTop_toBottomOf="@id/author" />
+            app:layout_constraintBottom_toTopOf="@id/published_skeleton"
+            app:layout_constraintStart_toEndOf="@id/avatar_skeleton"
+            app:layout_constraintTop_toBottomOf="@id/author_skeleton" />
 
         <TextView
-            android:foreground="?colorOutlineVariant"
-            android:id="@+id/published"
+            android:id="@+id/published_skeleton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/common_spacing"
-            app:layout_constraintEnd_toEndOf="@id/menu"
-            app:layout_constraintEnd_toStartOf="@id/menu"
-            app:layout_constraintStart_toEndOf="@id/avatar"
+            android:foreground="?colorOutlineVariant"
+            app:layout_constraintEnd_toEndOf="@id/menu_skeleton"
+            app:layout_constraintEnd_toStartOf="@id/menu_skeleton"
+            app:layout_constraintStart_toEndOf="@id/avatar_skeleton"
             app:layout_constraintTop_toBottomOf="@id/author0fPublished"
             tools:text="11.05.22 11:21" />
 
         <ImageView
-            android:id="@+id/menu"
+            android:id="@+id/menu_skeleton"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:contentDescription="@string/menu"
@@ -72,126 +72,126 @@
 
 
         <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/headerBarrier"
+            android:id="@+id/headerBarrier_skeleton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
             app:barrierMargin="12dp"
-            app:constraint_referenced_ids="avatar,menu,published" />
+            app:constraint_referenced_ids="avatar_skeleton,menu_skeleton,published_skeleton" />
 
 
         <TextView
-            android:foreground="?colorOutlineVariant"
-            android:id="@+id/status"
+            android:id="@+id/status_skeleton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/common_spacing"
             android:layout_marginEnd="@dimen/common_spacing"
-            app:layout_constraintBottom_toTopOf="@id/timeStatus"
+            android:foreground="?colorOutlineVariant"
+            app:layout_constraintBottom_toTopOf="@id/timeStatus_skeleton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/headerBarrier"
+            app:layout_constraintTop_toBottomOf="@id/headerBarrier_skeleton"
             tools:text="Offline" />
 
         <TextView
-            android:foreground="?colorOutlineVariant"
-            android:id="@+id/timeStatus"
+            android:id="@+id/timeStatus_skeleton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/common_spacing"
-            app:layout_constraintBottom_toTopOf="@id/content"
+            android:foreground="?colorOutlineVariant"
+            app:layout_constraintBottom_toTopOf="@id/content_skeleton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/status"
+            app:layout_constraintTop_toBottomOf="@id/status_skeleton"
             tools:text="16.05.22 12:00" />
 
 
         <TextView
-            android:foreground="?colorOutlineVariant"
-            android:id="@+id/content"
+            android:id="@+id/content_skeleton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/big_spacing"
             android:layout_marginEnd="@dimen/common_spacing"
             android:layout_marginBottom="@dimen/big_spacing"
+            android:foreground="?colorOutlineVariant"
             android:letterSpacing="0.02"
-            app:layout_constraintBottom_toTopOf="@id/link"
+            app:layout_constraintBottom_toTopOf="@id/link_skeleton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/timeStatus"
+            app:layout_constraintTop_toBottomOf="@id/timeStatus_skeleton"
             tools:text="Приглашаю провести уютный вечер за увлекательными играми! У нас есть несколько вариантов настолок, подходящих для любой компании." />
 
         <TextView
-            android:foreground="?colorOutlineVariant"
-            android:id="@+id/link"
+            android:id="@+id/link_skeleton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/big_spacing"
             android:layout_marginEnd="@dimen/common_spacing"
             android:autoLink="all"
             android:ellipsize="end"
+            android:foreground="?colorOutlineVariant"
             android:letterSpacing="0.02"
             android:maxLines="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/content"
+            app:layout_constraintTop_toBottomOf="@id/content_skeleton"
             tools:text="https://m2.material.io/components/cards" />
 
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/like"
-            android:enabled="false"
+            android:id="@+id/like_skeleton"
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/big_spacing"
             android:contentDescription="@string/likes"
+            android:enabled="false"
             app:icon="@drawable/baseline_favorite_border_24"
             app:iconTint="?colorPrimary"
-            app:layout_constraintEnd_toStartOf="@id/share"
+            app:layout_constraintEnd_toStartOf="@id/share_skeleton"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/link"
+            app:layout_constraintTop_toBottomOf="@+id/link_skeleton"
             tools:text="10" />
 
         <ImageView
-            android:enabled="false"
-            android:id="@+id/share"
+            android:id="@+id/share_skeleton"
             android:layout_width="40dp"
             android:layout_height="48dp"
             android:layout_marginStart="4dp"
             android:layout_marginTop="@dimen/big_spacing"
             android:layout_marginEnd="4dp"
             android:contentDescription="@string/share"
+            android:enabled="false"
             android:padding="12dp"
-            app:layout_constraintEnd_toStartOf="@id/space_shareToPeople"
-            app:layout_constraintStart_toEndOf="@id/like"
-            app:layout_constraintTop_toBottomOf="@+id/link"
+            app:layout_constraintEnd_toStartOf="@id/space_shareToPeople_skeleton"
+            app:layout_constraintStart_toEndOf="@id/like_skeleton"
+            app:layout_constraintTop_toBottomOf="@+id/link_skeleton"
             app:srcCompat="@drawable/icon" />
 
 
         <Space
-            android:id="@+id/space_shareToPeople"
+            android:id="@+id/space_shareToPeople_skeleton"
             android:layout_width="@dimen/frameShareToPeople"
             android:layout_height="48dp"
             android:layout_marginTop="@dimen/big_spacing"
-            app:layout_constraintEnd_toStartOf="@id/participated"
-            app:layout_constraintStart_toEndOf="@id/share"
-            app:layout_constraintTop_toBottomOf="@id/link" />
+            app:layout_constraintEnd_toStartOf="@id/participated_skeleton"
+            app:layout_constraintStart_toEndOf="@id/share_skeleton"
+            app:layout_constraintTop_toBottomOf="@id/link_skeleton" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/participated"
-            android:enabled="false"
+            android:id="@+id/participated_skeleton"
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/big_spacing"
             android:layout_marginEnd="@dimen/common_spacing"
             android:contentDescription="@string/event"
+            android:enabled="false"
             app:icon="@drawable/event"
             app:iconTint="?colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/space_shareToPeople"
-            app:layout_constraintTop_toBottomOf="@+id/link"
+            app:layout_constraintStart_toEndOf="@id/space_shareToPeople_skeleton"
+            app:layout_constraintTop_toBottomOf="@+id/link_skeleton"
             tools:text="2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
