@@ -9,6 +9,12 @@ import com.eltex.androidschool.mvi.ReducerResult
 import com.eltex.androidschool.utils.Either
 
 class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
+
+    private companion object {
+        const val PAGE_SIZE = 10
+        const val INITIAL_LOAD_SIZE = 3 * PAGE_SIZE
+    }
+
     override fun reducer(
         old: EventUiState, message: EventMessage
     ): ReducerResult<EventUiState, EventEffect> = when (message) {
@@ -42,7 +48,10 @@ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
                     old.copy(singleError = result.value)
                 }
 
-                is Either.Right -> old.copy(events = result.value, status = EventStatus.Idle)
+                is Either.Right -> old.copy(
+                    events = result.value,
+                    status = EventStatus.Idle(result.value.size < INITIAL_LOAD_SIZE)
+                )
             }
         )
 
@@ -83,10 +92,10 @@ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
             }))
         }
 
-        EventMessage.LoadNextPage -> if (old.status == EventStatus.Idle) {
+        EventMessage.LoadNextPage -> if (old.status is EventStatus.Idle && !old.status.finish) {
             ReducerResult(
                 old.copy(status = EventStatus.NextPageLoading),
-                EventEffect.LoadNextPage(old.events.last().id, 5)
+                EventEffect.LoadNextPage(old.events.last().id, PAGE_SIZE)
             )
         } else {
             ReducerResult(old)
@@ -104,7 +113,8 @@ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
                 )
 
                 is Either.Right -> old.copy(
-                    events = old.events + result.value, status = EventStatus.Idle
+                    events = old.events + result.value,
+                    status = EventStatus.Idle(result.value.size < PAGE_SIZE)
                 )
             }
         )
@@ -117,7 +127,7 @@ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
                 } else {
                     EventStatus.Refreshing
                 },
-            ), EventEffect.LoadInitialPage(15)
+            ), EventEffect.LoadInitialPage(INITIAL_LOAD_SIZE)
         )
 
         is EventMessage.Participate -> ReducerResult(old.copy(events = old.events.map {

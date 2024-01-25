@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eltex.androidschool.R
 import com.eltex.androidschool.databinding.CardEventBinding
 import com.eltex.androidschool.databinding.ItemErrorBinding
-import com.eltex.androidschool.databinding.ItemProgressBinding
+import com.eltex.androidschool.databinding.ItemSkeletonBinding
 import com.eltex.androidschool.model.EventUiModel
 import com.eltex.androidschool.model.PagingModel
 
@@ -96,7 +96,7 @@ class EventsAdapter(
 
     private fun createProgressViewHolder(parent: ViewGroup): ProgressViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return ProgressViewHolder(ItemProgressBinding.inflate(inflater, parent, false))
+        return ProgressViewHolder(ItemSkeletonBinding.inflate(inflater, parent, false))
     }
 
 
