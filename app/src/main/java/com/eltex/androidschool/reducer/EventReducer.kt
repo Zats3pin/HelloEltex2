@@ -83,7 +83,16 @@ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
             }))
         }
 
-        EventMessage.LoadNextPage -> ReducerResult(
+        EventMessage.LoadNextPage -> if (old.status == EventStatus.Idle) {
+            ReducerResult(
+                old.copy(status = EventStatus.NextPageLoading),
+                EventEffect.LoadNextPage(old.events.last().id, 5)
+            )
+        } else {
+            ReducerResult(old)
+        }
+
+        EventMessage.Retry -> ReducerResult(
             old.copy(status = EventStatus.NextPageLoading),
             EventEffect.LoadNextPage(old.events.last().id, 5)
         )

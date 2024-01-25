@@ -25,6 +25,7 @@ import com.eltex.androidschool.adapter.EventsAdapter
 import com.eltex.androidschool.api.EventsApi
 import com.eltex.androidschool.databinding.FragmentEventsBinding
 import com.eltex.androidschool.effecthandler.EventEffectHandler
+import com.eltex.androidschool.mapper.EventPagingModelMapper
 import com.eltex.androidschool.model.EventMessage
 import com.eltex.androidschool.model.EventUiModel
 import com.eltex.androidschool.model.EventUiState
@@ -101,6 +102,10 @@ class EventsFragment : Fragment() {
                     )
                 )
             }
+
+            override fun onRetryPageClickListener() {
+                viewModel.accept(EventMessage.Retry)
+            }
         }
         )
 
@@ -135,6 +140,7 @@ class EventsFragment : Fragment() {
         ) { _, _ ->
             viewModel.accept(EventMessage.Refresh)
         }
+        val mapper = EventPagingModelMapper()
         viewModel.state.flowWithLifecycle(viewLifecycleOwner.lifecycle).onEach { state ->
             binding.swipeRefresh.isRefreshing = state.isRefreshing
             val emptyError = state.emptyError
@@ -147,7 +153,7 @@ class EventsFragment : Fragment() {
                 ).show()
                 viewModel.accept(EventMessage.HandleError)
             }
-            adapter.submitList(state.events)
+            adapter.submitList(mapper.map(state))
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         return binding.root

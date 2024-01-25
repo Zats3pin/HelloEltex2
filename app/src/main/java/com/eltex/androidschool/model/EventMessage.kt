@@ -9,7 +9,7 @@ sealed interface EventMessage {
     data class Like(val event: EventUiModel) : EventMessage
     data class Participate(val event: EventUiModel) : EventMessage
 
-    //edit
+    data object Retry : EventMessage
     data class Delete(val event: EventUiModel) : EventMessage
     data object HandleError : EventMessage
 
