@@ -3,7 +3,6 @@ package com.eltex.androidschool.effecthandler
 import com.eltex.androidschool.mapper.EventUiModelMapper
 import com.eltex.androidschool.model.EventEffect
 import com.eltex.androidschool.model.EventMessage
-import com.eltex.androidschool.model.EventStatus
 import com.eltex.androidschool.model.EventWithError
 import com.eltex.androidschool.mvi.EffectHandler
 import com.eltex.androidschool.repository.EventRepository
@@ -11,8 +10,6 @@ import com.eltex.androidschool.utils.Either
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.map
-
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.merge
 import java.util.concurrent.CancellationException
@@ -76,6 +73,24 @@ class EventEffectHandler(
                     if (e is CancellationException) throw e
                     Either.Left(EventWithError(it.post,e))
                 }
+                )
+            },
+            messages.filterIsInstance<EventEffect.Participate>().
+            mapLatest {
+                EventMessage.ParticipateResult(
+                    try {
+                        Either.Right(mapper.map(
+                            if (it.post.participatedByMe) {
+                                repository.unParticipate(it.post.id)
+                            } else {
+                                repository.participate(it.post.id)
+                            }
+                        )
+                        )
+                    } catch (e: Exception) {
+                        if (e is CancellationException) throw e
+                        Either.Left(EventWithError(it.post,e))
+                    }
                 )
             },
 

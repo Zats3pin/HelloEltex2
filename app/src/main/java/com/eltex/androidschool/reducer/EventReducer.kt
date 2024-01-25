@@ -100,7 +100,7 @@ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
             }
         )
 
-        is EventMessage.Participate -> TODO()
+
         EventMessage.Refresh -> ReducerResult(
             old.copy(
                 status = if (old.events.isEmpty()) {
@@ -110,6 +110,44 @@ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
                 },
             ), EventEffect.LoadInitialPage(15)
         )
+
+        is EventMessage.Participate -> ReducerResult(old.copy(events = old.events.map {
+            if (it.id == message.event.id) {
+                message.event.copy(
+                    participatedByMe = !message.event.participatedByMe,
+                    participate = if (message.event.participatedByMe) {
+                        message.event.participate - 1
+                    } else {
+                        message.event.participate + 1
+                    }
+                )
+            } else {
+                it
+            }
+        }), EventEffect.Participate(message.event))
+
+        is EventMessage.ParticipateResult -> when (val result = message.result) {
+            is Either.Left -> ReducerResult(
+                old.copy(
+                    events = old.events.map {
+                        if (it.id == result.value.eventUiModel.id) {
+                            result.value.eventUiModel
+                        } else {
+                            it
+                        }
+                    }, singleError = result.value.throwable
+                )
+            )
+
+            is Either.Right -> ReducerResult(old.copy(events = old.events.map {
+                if (it.id == result.value.id) {
+                    result.value
+                } else {
+                    it
+                }
+            }))
+        }
+
     }
 
 }

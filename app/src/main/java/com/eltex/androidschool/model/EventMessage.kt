@@ -15,6 +15,7 @@ sealed interface EventMessage {
     // <=
     data class DeleteError(val error: EventWithError) : EventMessage
     data class LikeResult(val result: Either<EventWithError, EventUiModel>) : EventMessage
+    data class ParticipateResult(val result: Either<EventWithError, EventUiModel>) : EventMessage
     data class InitialLoaded(val result: Either<Throwable, List<EventUiModel>>) : EventMessage
     data class NextPageLoaded(val result: Either<Throwable, List<EventUiModel>>) : EventMessage
 }
