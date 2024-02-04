@@ -17,7 +17,8 @@ class EventItemCallback : ItemCallback<EventUiModel>() {
             participated = newItem.participatedByMe.takeIf { it != oldItem.participatedByMe },
             like = newItem.like.takeIf { it != oldItem.like },
             participate = newItem.participate.takeIf { it != oldItem.participate },
-
-            ).takeIf { it.isNotEmpty() || it.isNotEmptyParticipate() }
+            content = newItem.content.takeIf { it != oldItem.content },
+            attachment = newItem.attachment.takeIf { it != oldItem.attachment }
+        ).takeIf { it.isNotEmpty() || it.isNotEmptyParticipate() }
 }
 

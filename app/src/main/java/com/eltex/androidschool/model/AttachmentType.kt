@@ -8,10 +8,8 @@ import kotlinx.serialization.Serializable
 enum class AttachmentType {
     @SerialName("IMAGE")
     IMAGE,
-
     @SerialName("VIDEO")
     VIDEO,
-
     @SerialName("AUDIO")
     AUDIO,
     ;

@@ -9,13 +9,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/common_spacing"
-        android:paddingStart="@dimen/common_spacing"
         android:paddingTop="12dp"
+
         android:paddingEnd="4dp"
         tools:context=".activity.MainActivity">
 
         <ImageView
+
             android:id="@+id/avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -94,6 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/common_spacing"
             android:layout_marginEnd="@dimen/common_spacing"
+            android:paddingStart="@dimen/common_spacing"
             app:layout_constraintBottom_toTopOf="@id/timeStatus"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -105,11 +106,25 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/common_spacing"
-            app:layout_constraintBottom_toTopOf="@id/content"
+            android:paddingBottom="@dimen/common_spacing"
+            android:paddingStart="@dimen/common_spacing"
+            app:layout_constraintBottom_toTopOf="@id/attachmentPhoto"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/status"
             tools:text="16.05.22 12:00" />
+
+        <ImageView
+            android:id="@+id/attachmentPhoto"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/timeStatus"
+            tools:srcCompat="@tools:sample/avatars[11]"
+            tools:visibility="visible" />
 
 
         <TextView
@@ -120,10 +135,11 @@
             android:layout_marginEnd="@dimen/common_spacing"
             android:layout_marginBottom="@dimen/big_spacing"
             android:letterSpacing="0.02"
+            android:paddingStart="@dimen/common_spacing"
             app:layout_constraintBottom_toTopOf="@id/link"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/timeStatus"
+            app:layout_constraintTop_toBottomOf="@id/attachmentPhoto"
             tools:text="Приглашаю провести уютный вечер за увлекательными играми! У нас есть несколько вариантов настолок, подходящих для любой компании." />
 
         <TextView
@@ -136,6 +152,7 @@
             android:ellipsize="end"
             android:letterSpacing="0.02"
             android:maxLines="1"
+            android:paddingStart="@dimen/common_spacing"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/content"
@@ -149,6 +166,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/big_spacing"
             android:contentDescription="@string/likes"
+            android:paddingStart="@dimen/common_spacing"
             app:icon="@drawable/baseline_favorite_border_24"
             app:iconTint="?colorPrimary"
             app:layout_constraintEnd_toStartOf="@id/share"

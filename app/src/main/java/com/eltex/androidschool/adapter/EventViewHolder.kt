@@ -1,8 +1,12 @@
 package com.eltex.androidschool.adapter
 
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.eltex.androidschool.R
 import com.eltex.androidschool.databinding.CardEventBinding
+import com.eltex.androidschool.model.Attachment
 import com.eltex.androidschool.model.EventUiModel
 
 class EventViewHolder(
@@ -24,6 +28,15 @@ class EventViewHolder(
             updateParticipatedCount(payLoad.participate)
         }
 
+        if (payLoad.attachment != null) {
+            updateAttachment(payLoad.attachment)
+        }
+    }
+
+    private fun updateAttachment(attachment: Attachment) {
+        Glide.with(binding.attachmentPhoto)
+            .load(attachment.url)
+            .into(binding.attachmentPhoto)
     }
 
     fun bindEvent(
@@ -40,6 +53,12 @@ class EventViewHolder(
         updateParticipatedIcon(event.participatedByMe)
         updateLikeCount(event.like)
         updateParticipatedCount(event.participate)
+        if (event.attachment != null) {
+            binding.attachmentPhoto.isVisible = true
+            updateAttachment(event.attachment)
+        } else {
+            binding.attachmentPhoto.isGone = true
+        }
     }
 
     private fun updateLikeIcon(likedByMe: Boolean) {
