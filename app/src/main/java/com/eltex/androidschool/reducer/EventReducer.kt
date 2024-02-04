@@ -7,33 +7,32 @@ import com.eltex.androidschool.model.EventUiState
 import com.eltex.androidschool.mvi.Reducer
 import com.eltex.androidschool.mvi.ReducerResult
 import com.eltex.androidschool.utils.Either
+ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
 
-class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
 
-    private companion object {
-        const val PAGE_SIZE = 10
-        const val INITIAL_LOAD_SIZE = 3 * PAGE_SIZE
-    }
+     companion object {
+         const val PAGE_SIZE = 5
+         const val INITIAL_LOAD_SIZE = 2 * PAGE_SIZE
+     }
 
-    override fun reducer(
-        old: EventUiState, message: EventMessage
-    ): ReducerResult<EventUiState, EventEffect> = when (message) {
-        is EventMessage.Delete -> ReducerResult(
-            old.copy(events = old.events.filter {
-                it.id != message.event.id
-            }), EventEffect.Delete(message.event)
-        )
+     override fun reducer(
+         old: EventUiState, message: EventMessage
+     ): ReducerResult<EventUiState, EventEffect> = when (message) {
+         is EventMessage.Delete -> ReducerResult(
+             old.copy(events = old.events.filter {
+                 it.id != message.event.id
+             }), EventEffect.Delete(message.event)
+         )
 
-        is EventMessage.DeleteError -> ReducerResult(
-            old.copy(
-                events = buildList(old.events.size + 1) {
-                    val eventUiModel = message.error.eventUiModel
-                    addAll(old.events.takeWhile {
-                        it.id > message.error.eventUiModel.id
-                    })
-                    add(message.error.eventUiModel)
-                    addAll(old.events.takeLastWhile {
-                        it.id < message.error.eventUiModel.id
+         is EventMessage.DeleteError -> ReducerResult(
+             old.copy(
+                 events = buildList(old.events.size + 1) {
+                     addAll(old.events.takeWhile {
+                         it.id > message.error.eventUiModel.id
+                     })
+                     add(message.error.eventUiModel)
+                     addAll(old.events.takeLastWhile {
+                         it.id < message.error.eventUiModel.id
                     })
                 }, singleError = message.error.throwable
             )

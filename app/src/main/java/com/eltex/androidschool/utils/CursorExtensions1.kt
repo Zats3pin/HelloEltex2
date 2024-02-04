@@ -15,9 +15,11 @@ fun Cursor.getStringOrThrow(columnName: String): String {
 fun Cursor.getIntOrThrow(columnName: String): Int {
     val columnIndex = getColumnIndexOrThrow(columnName)
     return getInt(columnIndex)
-} // на будущее оставил
+}
 
 fun Cursor.getBooleanOrThrow(columnName: String): Boolean {
     val columnIndex = getColumnIndexOrThrow(columnName)
     return getInt(columnIndex) != 0
+    // на будущее оставил
+
 }

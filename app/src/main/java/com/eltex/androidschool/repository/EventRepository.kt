@@ -8,10 +8,7 @@ interface EventRepository {
     suspend fun getLatest(count: Int): List<Event>
     suspend fun getBefore(id: Long, count: Int): List<Event>
     suspend fun participate(id: Long): Event
-    suspend fun menu()
-    suspend fun share()
     suspend fun editById(id: Long, content: String): Event
-    suspend fun getEvents(): List<Event>
     suspend fun likeById(id: Long): Event
     suspend fun unLikeById(id: Long): Event
     suspend fun unParticipate(id: Long): Event

@@ -1,10 +1,10 @@
 package com.eltex.androidschool.fragments
 
-import com.eltex.androidschool.utils.toast
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -13,12 +13,12 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
 import com.eltex.androidschool.R
-import androidx.core.os.bundleOf
 import com.eltex.androidschool.api.EventsApi
-import com.eltex.androidschool.utils.Status
-import com.eltex.androidschool.repository.NetworkEventRepository
-import com.eltex.androidschool.utils.getText
 import com.eltex.androidschool.databinding.FragmentNewPostBinding
+import com.eltex.androidschool.repository.NetworkEventRepository
+import com.eltex.androidschool.utils.Status
+import com.eltex.androidschool.utils.getText
+import com.eltex.androidschool.utils.toast
 import com.eltex.androidschool.viewmodel.NewEventViewModel
 import com.eltex.androidschool.viewmodel.ToolbarViewModel
 import kotlinx.coroutines.flow.filter
@@ -95,14 +95,6 @@ class NewEventFragment : Fragment() {
             toolbarViewModel.saveClicked(false)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
         return binding.root
-    }
-
-    private var eventId: Long = -1
-    private var eventContent: String = ""
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
     }
 
 }
