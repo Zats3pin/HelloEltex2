@@ -24,4 +24,10 @@
     <string name="posts_description">пост</string>
     <string name="event_description">событие</string>
     <string name="users_description">пользователь</string>
+    <string name="network_error">ошибка сети</string>
+    <string name="unknown_error">неизвестная ошибка</string>
+    <string name="retry">попробовать снова</string>
+    <string name="remove">удалить</string>
+    <string name="take_photo_description">сделать фото</string>
+    <string name="pick_file_description">выбрать файл</string>
 </resources>

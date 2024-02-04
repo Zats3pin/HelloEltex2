@@ -1,10 +1,15 @@
 package com.eltex.androidschool.fragments
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -15,6 +20,8 @@ import androidx.navigation.fragment.findNavController
 import com.eltex.androidschool.R
 import com.eltex.androidschool.api.EventsApi
 import com.eltex.androidschool.databinding.FragmentNewPostBinding
+import com.eltex.androidschool.model.AttachmentType
+import com.eltex.androidschool.model.FileModel
 import com.eltex.androidschool.repository.NetworkEventRepository
 import com.eltex.androidschool.utils.Status
 import com.eltex.androidschool.utils.getText
@@ -45,6 +52,7 @@ class NewEventFragment : Fragment() {
         toolbarViewModel.showSave(false)
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -61,11 +69,35 @@ class NewEventFragment : Fragment() {
             viewModelFactory {
                 initializer {
                     NewEventViewModel(
-                        repository = NetworkEventRepository(EventsApi.INSTANCE),
-                        eventId = id
+                        repository = NetworkEventRepository(EventsApi.INSTANCE), eventId = id
                     )
                 }
             }
+        }
+
+        val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) {
+            it?.let {
+                viewModel.saveFile(FileModel(it, AttachmentType.IMAGE))
+            }
+        }
+
+        binding.remove.setOnClickListener {
+            viewModel.saveFile(null)
+        }
+
+        binding.pickFile.setOnClickListener {
+            pickImage.launch("image/*")
+        }
+        val imageUri = createFileUri()
+        val takePhoto =
+            registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+                if (success) {
+                    viewModel.saveFile(FileModel(imageUri, AttachmentType.IMAGE))
+                }
+            }
+
+        binding.takePhoto.setOnClickListener {
+            takePhoto.launch(imageUri)
         }
 
 
@@ -74,6 +106,20 @@ class NewEventFragment : Fragment() {
                 requireContext().applicationContext.toast(it.reason.getText(requireContext()), true)
                 viewModel.consumeError()
             }
+
+
+            val file = state.file
+            when (file?.attachmentType) {
+                AttachmentType.IMAGE -> {
+                    binding.preview.isVisible = true
+                    binding.photoPreview.setImageURI(file.uri)
+                }
+
+                AttachmentType.VIDEO -> TODO()
+                AttachmentType.AUDIO -> TODO()
+                null -> binding.preview.isGone = true
+            }
+
             state.result?.let {
                 requireActivity().supportFragmentManager.setFragmentResult(
                     POST_CREATED_RESULT, bundleOf()
@@ -86,8 +132,7 @@ class NewEventFragment : Fragment() {
             val content = binding.content.text?.toString().orEmpty()
             if (content.isBlank()) {
                 requireContext().applicationContext.toast(
-                    R.string.post_empty_error.toString(),
-                    true
+                    R.string.post_empty_error.toString(), true
                 )
             } else {
                 viewModel.save(content)
@@ -95,6 +140,20 @@ class NewEventFragment : Fragment() {
             toolbarViewModel.saveClicked(false)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
         return binding.root
+    }
+
+    private fun createFileUri(): Uri {
+        val directory = requireContext().cacheDir.resolve("file_picker").apply {
+            mkdirs()
+        }
+
+        val file = directory.resolve("image.png")
+
+        return FileProvider.getUriForFile(
+            requireContext(),
+            "${requireContext().packageName}.fileprovider",
+            file
+        )
     }
 
 }

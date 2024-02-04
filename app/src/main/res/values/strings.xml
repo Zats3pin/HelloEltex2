@@ -27,4 +27,7 @@
     <string name="network_error">network error</string>
     <string name="unknown_error">unknown error</string>
     <string name="retry">retry</string>
+    <string name="remove">Remove</string>
+    <string name="take_photo_description">take photo</string>
+    <string name="pick_file_description">pick file</string>
 </resources>

@@ -32,5 +32,6 @@ data class Event(
     val likeOwnerIds: Set<Long> = emptySet(),
     @SerialName("participantsIds")
     val participantsIds: Set<Long> = emptySet(),
-
-    )
+    // @SerialName("authorAvatar")
+    //val authorAvatar: String? = "",
+)
