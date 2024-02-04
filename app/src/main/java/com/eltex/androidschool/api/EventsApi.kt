@@ -37,7 +37,7 @@ interface EventsApi {
 
     companion object {
         val INSTANCE: EventsApi by lazy {
-            RetrofitFactory.INSTANSE.create<EventsApi>()
+            RetrofitFactory.INSTANCE.create<EventsApi>()
         }
     }
 

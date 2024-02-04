@@ -22,7 +22,7 @@ class NewEventViewModel(
         viewModelScope.launch {
             try {
                 val data = repository.saveEvent(
-                    eventId, content, datetime = Instant.now()
+                    eventId, content, datetime = Instant.now(), _state.value.file
                 )
                 _state.update {
                     it.copy(result = data, status = Status.Idle)

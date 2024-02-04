@@ -19,6 +19,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
 import com.eltex.androidschool.R
 import com.eltex.androidschool.api.EventsApi
+import com.eltex.androidschool.api.MediaApi
 import com.eltex.androidschool.databinding.FragmentNewPostBinding
 import com.eltex.androidschool.model.AttachmentType
 import com.eltex.androidschool.model.FileModel
@@ -69,7 +70,11 @@ class NewEventFragment : Fragment() {
             viewModelFactory {
                 initializer {
                     NewEventViewModel(
-                        repository = NetworkEventRepository(EventsApi.INSTANCE), eventId = id
+                        repository = NetworkEventRepository(
+                            EventsApi.INSTANCE,
+                            MediaApi.INSTANCE,
+                            requireContext().contentResolver,
+                        ), eventId = id
                     )
                 }
             }

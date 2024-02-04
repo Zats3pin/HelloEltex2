@@ -2,8 +2,8 @@ package com.eltex.androidschool.api
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
-import retrofit2.Retrofit
 import okhttp3.MediaType.Companion.toMediaType
+import retrofit2.Retrofit
 
 
 object RetrofitFactory {
@@ -13,7 +13,7 @@ object RetrofitFactory {
         coerceInputValues = true
     }
 
-    val INSTANSE: Retrofit by lazy {
+    val INSTANCE: Retrofit by lazy {
         Retrofit.Builder().baseUrl("https://eltex-android.ru/")
             .client(OkHttpFactory.INSTANCE)
             .addConverterFactory(JSON.asConverterFactory(JSON_TYPE))
