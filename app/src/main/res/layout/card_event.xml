@@ -10,19 +10,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="12dp"
-
         android:paddingEnd="4dp"
         tools:context=".activity.MainActivity">
 
         <ImageView
-
             android:id="@+id/avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:contentDescription="@string/avatar"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/avatar_background" />
+            app:srcCompat="@drawable/avatar_background"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/initial"
@@ -106,8 +106,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/common_spacing"
-            android:paddingBottom="@dimen/common_spacing"
             android:paddingStart="@dimen/common_spacing"
+            android:paddingBottom="@dimen/common_spacing"
             app:layout_constraintBottom_toTopOf="@id/attachmentPhoto"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

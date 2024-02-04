@@ -8,10 +8,11 @@ data class EventPayLoad(
     val like: Int? = null,
     val participate: Int? = null,
     val content: String? = null,
-    val attachment: Attachment? = null
+    val attachment: Attachment? = null,
+    val authorAvatar: String?
 ) {
     fun isNotEmpty(): Boolean =
-        liked != null || like != null || participate != null || content != null || attachment != null
+        liked != null || like != null || participate != null || content != null || attachment != null || authorAvatar != null
 
     fun isNotEmptyParticipate(): Boolean = participated != null
 }

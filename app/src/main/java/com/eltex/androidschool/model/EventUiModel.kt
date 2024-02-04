@@ -14,5 +14,6 @@ data class EventUiModel(
     val like: Int = 0,
     val participate: Int = 0,
     val attachment: Attachment? = null,
+    val authorAvatar: String?,
 )
 

@@ -4,6 +4,8 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.eltex.androidschool.R
 import com.eltex.androidschool.databinding.CardEventBinding
 import com.eltex.androidschool.model.Attachment
@@ -33,10 +35,18 @@ class EventViewHolder(
         }
     }
 
+    private fun updateAuthorAvatar(authorAvatar: String) {
+        if (authorAvatar != null) {
+            Glide.with(binding.avatar).load(authorAvatar)
+                .apply(RequestOptions.bitmapTransform(CircleCrop())).into(binding.avatar)
+        } else {
+            binding.avatar.setImageResource(R.drawable.avatar_background)
+        }
+    }
+
+
     private fun updateAttachment(attachment: Attachment) {
-        Glide.with(binding.attachmentPhoto)
-            .load(attachment.url)
-            .into(binding.attachmentPhoto)
+        Glide.with(binding.attachmentPhoto).load(attachment.url).into(binding.attachmentPhoto)
     }
 
     fun bindEvent(
@@ -58,6 +68,17 @@ class EventViewHolder(
             updateAttachment(event.attachment)
         } else {
             binding.attachmentPhoto.isGone = true
+        }
+
+        if (event.authorAvatar != null) {
+            binding.avatar.isVisible = true
+            updateAuthorAvatar(event.authorAvatar)
+            binding.initial.isGone = true
+        } else {
+            binding.avatar.isVisible = true
+            binding.initial.isVisible = true
+            binding.initial.text = event.author.take(1)
+            binding.avatar.setImageResource(R.drawable.avatar_background)
         }
     }
 

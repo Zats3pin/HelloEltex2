@@ -23,7 +23,9 @@ class EventUiModelMapper {
             participatedByMe = participatedByMe,
             like = likeOwnerIds.size,
             participate = participantsIds.size,
-            attachment = attachment
+            attachment = attachment,
+            authorAvatar = authorAvatar
+
         )
     }
 }
