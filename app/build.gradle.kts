@@ -3,7 +3,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     kotlin("plugin.serialization") version "1.9.21"
-    id("com.google.devtools.ksp") version "1.9.21-1.0.15"
+    id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -85,7 +86,10 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
 
-
+    val daggerVersion = "2.50"
+    implementation("com.google.dagger:hilt-android:$daggerVersion")
+    ksp("com.google.dagger:dagger-compiler:$daggerVersion")
+    ksp("com.google.dagger:hilt-compiler:$daggerVersion")
 
 
     implementation("com.github.bumptech.glide:glide:4.16.0")
