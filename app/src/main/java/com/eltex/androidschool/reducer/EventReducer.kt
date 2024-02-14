@@ -7,17 +7,19 @@ import com.eltex.androidschool.model.EventUiState
 import com.eltex.androidschool.mvi.Reducer
 import com.eltex.androidschool.mvi.ReducerResult
 import com.eltex.androidschool.utils.Either
- class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
+import javax.inject.Inject
+
+class EventReducer @Inject constructor() : Reducer<EventUiState, EventEffect, EventMessage> {
 
 
-     companion object {
-         const val PAGE_SIZE = 5
-         const val INITIAL_LOAD_SIZE = 2 * PAGE_SIZE
-     }
+    companion object {
+        const val PAGE_SIZE = 5
+        const val INITIAL_LOAD_SIZE = 2 * PAGE_SIZE
+    }
 
-     override fun reducer(
-         old: EventUiState, message: EventMessage
-     ): ReducerResult<EventUiState, EventEffect> = when (message) {
+    override fun reducer(
+        old: EventUiState, message: EventMessage
+    ): ReducerResult<EventUiState, EventEffect> = when (message) {
          is EventMessage.Delete -> ReducerResult(
              old.copy(events = old.events.filter {
                  it.id != message.event.id

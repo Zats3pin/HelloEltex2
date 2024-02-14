@@ -2,23 +2,22 @@ package com.eltex.androidschool.mapper
 
 import com.eltex.androidschool.model.Event
 import com.eltex.androidschool.model.EventUiModel
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
-class EventUiModelMapper {
-    companion object {
-        val FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm")
-    }
+
+class EventUiModelMapper @Inject constructor(
+    private val eventDateTimeFormatter: EventDateTimeFormatter
+) {
 
     fun map(event: Event): EventUiModel = with(event) {
         EventUiModel(
             id = id,
             content = content,
             author = author,
-            published = FORMATTER.format(published.atZone(ZoneId.systemDefault())),
+            published = eventDateTimeFormatter.formatInstant(published),
             url = url,
             type = type,
-            datetime = FORMATTER.format(datetime.atZone(ZoneId.systemDefault())),
+            datetime = eventDateTimeFormatter.formatInstant(datetime),
             likedByMe = likedByMe,
             participatedByMe = participatedByMe,
             like = likeOwnerIds.size,
